@@ -1,0 +1,22 @@
+# Node modules
+node_modules/
+
+# Env files (VERY IMPORTANT)
+.env
+
+# Logs
+logs
+*.log
+
+# OS files
+.DS_Store
+
+# Build folders
+dist/
+build/
+
+# Vite
+.vite/
+
+# Uploads (optional)
+backend/uploads/
