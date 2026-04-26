@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { io } from "socket.io-client";
 import { useLocation } from "react-router-dom";
 
-const socket = io("http://localhost:5000");
+const API = import.meta.env.VITE_API_URL;
 
 const OrderSuccess = () => {
   const [status, setStatus] = useState("pending");
@@ -13,6 +13,9 @@ const OrderSuccess = () => {
   const orderId = location.state?.orderId;
 
   useEffect(() => {
+
+    const socket = io(API);
+
     socket.on("orderUpdated", (order) => {
       if (order._id === orderId) {
         console.log("📦 Order Updated:", order);

@@ -1,18 +1,19 @@
 //See live orders 🔥
 
-import React from 'react'
+import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import { useEffect, useState } from "react";
 
-const socket = io("http://localhost:5000");
+const API = import.meta.env.VITE_API_URL;
 
 const Orders = () => {
-  const [ orders, setOrders ] = useState([]);
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
+    // create socket connection INSIDE useEffect
+    const socket = io(API);
+
     socket.on("newOrder", (order) => {
       console.log("🔥 New Order:", order);
-
       setOrders((prev) => [order, ...prev]);
     });
 
@@ -25,8 +26,7 @@ const Orders = () => {
     });
 
     return () => {
-      socket.off("newOrder");
-      socket.off("orderUpdated");
+      socket.disconnect(); // very important
     };
   }, []);
 
@@ -46,4 +46,3 @@ const Orders = () => {
 };
 
 export default Orders;
-
