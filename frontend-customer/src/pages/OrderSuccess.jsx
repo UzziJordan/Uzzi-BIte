@@ -93,8 +93,10 @@ const OrderSuccess = () => {
               const stepIndex = orderFlow.indexOf(step.key);
 
               let state = "pending";
+              
               if (stepIndex < currentIndex) state = "completed";
-              else if (stepIndex === currentIndex) state = "active";
+              else if (stepIndex === currentIndex) state = "completed";
+              else if (stepIndex === currentIndex + 1) state = "active";
 
               return (
                 <div key={step.key} className="flex items-center gap-4 relative">
@@ -143,10 +145,11 @@ const OrderSuccess = () => {
           </div>
         )}
 
-        {/* FOOTER */}
-        <p className="text-gray-400 text-sm mt-6 text-center">
-          The page updates automatically 🍽️
-        </p>
+        {status === "served" && (
+          <p className="text-green-500 text-center mt-6 font-semibold">
+            🎉 Your order has been served!
+          </p>
+        )}
       </div>
     </div>
   );
