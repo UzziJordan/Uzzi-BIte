@@ -9,6 +9,7 @@ const {
   createOrder,
   getOrders,
   getMyOrders,
+  getOrderById,
   updateOrderStatus
 } = require("../controllers/order.controller");
 
@@ -24,6 +25,9 @@ router.get("/", verifyToken, isAdmin, getOrders);
 
 // table gets their orders
 router.get("/my-orders", verifyToken, isTable, getMyOrders);
+
+// get single order
+router.get("/:id", verifyToken, getOrderById);
 
 // admin updates order
 router.put("/:id", verifyToken, isAdmin, updateOrderStatus);
