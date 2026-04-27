@@ -4,14 +4,19 @@ import Login from './pages/Login';
 import Menu from './pages/Menu';
 import Onboarding from './pages/Onboarding';
 import OrderSuccess from './pages/OrderSuccess';
-import Navbar from './components/Navbar';
 import { AuthProvider } from './context/AuthContext';
 
 function App() {
   return (
     <AuthProvider>
       <Router>
-        <OrderSuccess />
+        <Routes>
+          <Route path="/order-success/:id" element={<OrderSuccess />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/menu" element={<Menu />} />
+          <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/" element={<Onboarding />} />
+        </Routes>
       </Router>
     </AuthProvider>
   );
