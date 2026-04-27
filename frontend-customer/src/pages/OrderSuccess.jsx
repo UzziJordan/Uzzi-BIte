@@ -9,27 +9,32 @@ const OrderSuccess = () => {
   const location = useLocation();
   const orderId = location.state?.orderId;
 
-  useEffect(() => {
-    if (!orderId) return;
+useEffect(() => {
+  if (!orderId) return;
 
-    const socket = io(API);
+  const socket = io(API);
 
-    const handleOrderUpdate = (order) => {
-      if (order._id === orderId) {
-        console.log("📦 Order Updated:", order);
-        setStatus(order.status);
-      }
-    };
+  socket.on("connect", () => {
+    console.log("✅ Connected to socket:", socket.id);
+  });
 
-    socket.on("orderUpdated", handleOrderUpdate);
+  const handleOrderUpdate = (order) => {
+    console.log("📦 Incoming update:", order);
 
-    return () => {
-      socket.off("orderUpdated", handleOrderUpdate);
-      socket.disconnect(); // ✅ important fix
-    };
-  }, [orderId]);
+    if (order._id === orderId) {
+      setStatus(order.status);
+    }
+  };
 
-  return (
+  socket.on("orderUpdated", handleOrderUpdate);
+
+  return () => {
+    socket.off("orderUpdated", handleOrderUpdate);
+    socket.disconnect();
+  };
+}, [orderId]);
+
+return (
     <div>
       <h2>Order Status</h2>
       <p>{status}</p>
