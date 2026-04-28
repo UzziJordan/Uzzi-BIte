@@ -1,29 +1,35 @@
+/*Customers create orders
+Admin updates status*/
+
 const express = require("express");
 const router = express.Router();
 
+// import controller
 const {
   createOrder,
   getOrders,
-  updateOrderStatus,
   getMyOrders,
-  getOrderById
+  getOrderById,
+  updateOrderStatus
 } = require("../controllers/order.controller");
 
+// import middleware
 const { verifyToken, isAdmin, isTable } = require("../middleware/auth");
 
-// CREATE
+// table creates order
 router.post("/", verifyToken, isTable, createOrder);
 
-// ADMIN GET ALL
+// admin gets all orders
 router.get("/", verifyToken, isAdmin, getOrders);
 
-// TABLE GET OWN
+
+// table gets their orders
 router.get("/my-orders", verifyToken, isTable, getMyOrders);
 
-// ✅ SINGLE ORDER (VERY IMPORTANT)
-router.get("/my-orders/:id", getOrderById);
+// get single order
+router.get("/:id", verifyToken, getOrderById);
 
-// UPDATE
+// admin updates order
 router.put("/:id", verifyToken, isAdmin, updateOrderStatus);
 
 module.exports = router;
