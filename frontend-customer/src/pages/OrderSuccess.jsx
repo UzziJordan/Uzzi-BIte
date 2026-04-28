@@ -2,16 +2,19 @@ import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 
 const API = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 
 const OrderSuccess = () => {
   const { id: orderId } = useParams();
+  const { token } = useAuth();
   const [status, setStatus] = useState("pending");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!orderId) {
+    if (!orderId || !token) {
+      if (!token) console.warn("⚠️ No auth token available yet");
       setLoading(false);
       return;
     }
@@ -21,7 +24,11 @@ const OrderSuccess = () => {
       try {
         console.log("🔍 Fetching initial status for:", orderId);
 
-        const res = await axios.get(`${API}/api/orders/${orderId}`);
+        const res = await axios.get(`${API}/api/orders/${orderId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         console.log("✅ Initial status:", res.data.status);
         setStatus(res.data.status);
@@ -61,7 +68,7 @@ const OrderSuccess = () => {
       socket.off("orderUpdated", handleOrderUpdate);
       socket.disconnect();
     };
-  }, [orderId]);
+  }, [orderId, token]);
 
   return (
     <div className="bg-[#FBF9FA] min-h-screen flex items-center justify-center px-4">
