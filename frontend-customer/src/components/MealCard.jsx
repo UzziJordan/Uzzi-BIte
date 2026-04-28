@@ -4,7 +4,7 @@ const MealCard = ({ meal, addToCart }) => {
   return (
     <div className="bg-white rounded-xl shadow overflow-hidden">
       <img
-        src={meal.image || "https://via.placeholder.com/150"}
+        src={meal.image || "https://placehold.co/300x200?text=No+Image"}
         alt={meal.name}
         className="w-full h-32 object-cover"
       />

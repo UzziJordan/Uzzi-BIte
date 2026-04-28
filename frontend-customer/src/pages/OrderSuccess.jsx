@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
-const API = import.meta.env.VITE_API_URL;
+const API = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 
 const OrderSuccess = () => {
   const { id: orderId } = useParams();
@@ -21,7 +21,7 @@ const OrderSuccess = () => {
       try {
         console.log("🔍 Fetching initial status for:", orderId);
 
-        const res = await axios.get(`${API}/api/orders/my-orders/${orderId}`);
+        const res = await axios.get(`${API}/api/orders/${orderId}`);
 
         console.log("✅ Initial status:", res.data.status);
         setStatus(res.data.status);
