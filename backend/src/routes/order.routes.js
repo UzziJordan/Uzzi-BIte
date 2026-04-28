@@ -21,7 +21,7 @@ router.get("/", verifyToken, isAdmin, getOrders);
 router.get("/my-orders", verifyToken, isTable, getMyOrders);
 
 // ✅ SINGLE ORDER (VERY IMPORTANT)
-router.get("/:id", getOrderById);
+router.get("/my-orders/:id", getOrderById);
 
 // UPDATE
 router.put("/:id", verifyToken, isAdmin, updateOrderStatus);

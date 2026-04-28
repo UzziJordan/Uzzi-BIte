@@ -41,27 +41,32 @@ const Cart = ({ cartItems, setCartItems, closeCart }) => {
 
   const placeOrder = async () => {
     try {
+      const baseURL = API.replace(/\/$/, ""); // ✅ fix double slash
+
       const formattedItems = cartItems.map((item) => ({
         meal: item._id,
-        quantity: item.quantity
+        quantity: item.quantity,
       }));
 
       const res = await axios.post(
-        `${API}/api/orders`,
+        `${baseURL}/api/orders`,
         { items: formattedItems },
         {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
       const orderId = res.data._id;
 
       setCartItems([]);
+      closeCart(); // ✅ close cart after order
       navigate(`/order-success/${orderId}`);
+
     } catch (err) {
-      console.error(err);
+      console.error(err.response?.data || err.message);
+      alert("Login required to place order");
     }
   };
 
@@ -85,8 +90,9 @@ const Cart = ({ cartItems, setCartItems, closeCart }) => {
         {cartItems.map((item) => (
           <div key={item._id} className="flex gap-3 items-center">
             <img
-              src={item.image || "https://via.placeholder.com/60"}
-              className="w-14 h-14 rounded"
+              src={item.image || "https://placehold.co/60"} // ✅ fixed broken image
+              alt={item.name}
+              className="w-14 h-14 rounded object-cover"
             />
 
             <div className="flex-1">

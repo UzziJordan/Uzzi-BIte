@@ -21,7 +21,7 @@ const OrderSuccess = () => {
       try {
         console.log("🔍 Fetching initial status for:", orderId);
 
-        const res = await axios.get(`${API}/api/orders/${orderId}`);
+        const res = await axios.get(`${API}/api/orders/my-orders/${orderId}`);
 
         console.log("✅ Initial status:", res.data.status);
         setStatus(res.data.status);
