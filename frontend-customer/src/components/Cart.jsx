@@ -90,7 +90,7 @@ const Cart = ({ cartItems, setCartItems, closeCart }) => {
         {cartItems.map((item) => (
           <div key={item._id} className="flex gap-3 items-center">
             <img
-              src={item.image || "https://placehold.co/60"} // ✅ fixed broken image
+              src={item.image}
               alt={item.name}
               className="w-14 h-14 rounded object-cover"
             />
