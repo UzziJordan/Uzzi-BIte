@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import MealCard from "../components/MealCard";
 import Cart from "../components/Cart";
 
@@ -11,6 +13,13 @@ const Menu = () => {
   const [categories, setCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState("All");
   const [showCart, setShowCart] = useState(false);
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   useEffect(() => {
     const fetchMeals = async () => {
@@ -64,9 +73,30 @@ const Menu = () => {
       <div className="flex justify-between items-center p-4 bg-white shadow">
         <h1 className="font-bold text-lg">Uzzi Bitez</h1>
 
-        <button onClick={() => setShowCart(true)}>
-          🛒 ({cartItems.length})
-        </button>
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={() => navigate("/my-orders")}
+            className="text-sm font-medium text-gray-600 hover:text-red-500"
+          >
+            My Orders
+          </button>
+          
+          <button 
+            onClick={handleLogout}
+            className="text-sm font-medium text-red-500 border border-red-100 px-3 py-1 rounded-lg bg-red-50 hover:bg-red-100"
+          >
+            Logout
+          </button>
+
+          <button onClick={() => setShowCart(true)} className="relative">
+            <span className="text-xl">🛒</span>
+            {cartItems.length > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+                {cartItems.length}
+              </span>
+            )}
+          </button>
+        </div>
       </div>
 
       {/* ✅ CATEGORY FILTER */}

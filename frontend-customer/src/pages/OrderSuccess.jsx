@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 
@@ -9,6 +9,7 @@ const API = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 const OrderSuccess = () => {
   const { id: orderId } = useParams();
   const { token } = useAuth();
+  const navigate = useNavigate();
   const [status, setStatus] = useState("pending");
   const [loading, setLoading] = useState(true);
 
@@ -157,6 +158,23 @@ const OrderSuccess = () => {
             🎉 Your order has been served!
           </p>
         )}
+
+        {/* ACTION BUTTONS */}
+        <div className="mt-8 space-y-3">
+          <button
+            onClick={() => navigate("/dashboard")}
+            className="w-full bg-red-500 text-white py-3 rounded-xl font-bold shadow-md shadow-red-100 hover:bg-red-600 transition-colors"
+          >
+            Place More Order 🚀
+          </button>
+          
+          <button
+            onClick={() => navigate("/my-orders")}
+            className="w-full bg-gray-100 text-gray-700 py-3 rounded-xl font-bold hover:bg-gray-200 transition-colors"
+          >
+            My Orders 📋
+          </button>
+        </div>
       </div>
     </div>
   );

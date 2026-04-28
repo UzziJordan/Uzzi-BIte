@@ -60,9 +60,13 @@ const Cart = ({ cartItems, setCartItems, closeCart }) => {
 
       const orderId = res.data._id;
 
+      // ✅ Save order ID to current session
+      const existingOrders = JSON.parse(localStorage.getItem("placedOrderIds") || "[]");
+      localStorage.setItem("placedOrderIds", JSON.stringify([...existingOrders, orderId]));
+
       setCartItems([]);
       closeCart(); // ✅ close cart after order
-      navigate(`/order-success/${orderId}`);
+      navigate("/my-orders");
 
     } catch (err) {
       console.error(err.response?.data || err.message);

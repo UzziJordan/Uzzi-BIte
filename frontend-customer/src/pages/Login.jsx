@@ -25,6 +25,9 @@ const Login = () => {
 
       setToken(res.data.token);
 
+      // ✅ Clear previous session orders
+      localStorage.removeItem("placedOrderIds");
+
       // go to menu
       navigate("/dashboard");
 
