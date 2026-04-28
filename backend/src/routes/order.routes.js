@@ -12,13 +12,13 @@ const {
 const { verifyToken, isAdmin, isTable } = require("../middleware/auth");
 
 // CREATE
-router.post("/", verifyToken, isTable, createOrder);
+router.post("/", isTable, createOrder);
 
 // ADMIN GET ALL
 router.get("/", verifyToken, isAdmin, getOrders);
 
 // TABLE GET OWN
-router.get("/my-orders", verifyToken, isTable, getMyOrders);
+router.get("/my-orders", isTable, getMyOrders);
 
 // ✅ SINGLE ORDER (VERY IMPORTANT)
 router.get("/:id", getOrderById);
