@@ -10,7 +10,8 @@ const {
   getOrders,
   getMyOrders,
   getOrderById,
-  updateOrderStatus
+  updateOrderStatus,
+  deleteOrder
 } = require("../controllers/order.controller");
 
 // import middleware
@@ -31,5 +32,8 @@ router.get("/:id", verifyToken, getOrderById);
 
 // admin updates order
 router.put("/:id", verifyToken, isAdmin, updateOrderStatus);
+
+// admin deletes order
+router.delete("/:id", verifyToken, isAdmin, deleteOrder);
 
 module.exports = router;

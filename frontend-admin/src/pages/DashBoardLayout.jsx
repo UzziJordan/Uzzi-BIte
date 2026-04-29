@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, useNavigate } from "react-router-dom";
 
-import Sidebar from "../../../frontend-admin/src/components/Sidebar"
+import Sidebar from "../components/Sidebar";
 
 const DashBoardLayout = () => {
   return (

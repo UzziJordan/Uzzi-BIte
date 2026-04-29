@@ -1,20 +1,41 @@
-import React from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import DashBoardLayout from './pages/DasboardLayout';
-import Login from './pages/Login';
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Login from "./pages/Login.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import Meals from "./pages/Meals.jsx";
+import Orders from "./pages/Orders.jsx";
+import Tables from "./pages/Tables.jsx";
+import DashBoardLayout from "./pages/DashBoardLayout.jsx";
+import { AuthProvider, useAuth } from "./context/AuthContext.jsx";
 
-import Orders from './pages/Orders';
+const ProtectedRoute = ({ children }) => {
+  const { token } = useAuth();
+  return token ? children : <Navigate to="/" />;
+};
 
-const App = () => {
+function App() {
   return (
-    <BrowserRouter>
-      
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<Login />} />
-      </Routes>
-    </BrowserRouter>
-  )
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Login />} />
+
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashBoardLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<Dashboard />} />
+            <Route path="meals" element={<Meals />} />
+            <Route path="orders" element={<Orders />} />
+            <Route path="tables" element={<Tables />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;

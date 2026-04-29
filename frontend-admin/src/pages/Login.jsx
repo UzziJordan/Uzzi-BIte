@@ -1,41 +1,75 @@
-import React from 'react'
-import image from '../assets/loggin.jpg'
-import logo from '../assets/Background.png'
+import React, { useState } from "react";
+import axios from "axios";
+import image from "../assets/loggin.jpg";
+import logo from "../assets/Background.png";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
-const Login
- = () => {
+const API = import.meta.env.VITE_API_URL.replace(/\/$/, "");
+
+const Login = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const [form, setForm] = useState({
+    username: "",
+    password: "",
+  });
+
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+        const baseURL = API.replace(/\/$/, ""); // ✅ remove double slash
+      const res = await axios.post(`${baseURL}/api/auth/login`, form);
+
+      login(res.data.token);
+      navigate("/dashboard");
+    } catch (err) {
+      alert("Invalid credentials");
+    }
+  };
+
   return (
-    <div className='flex h-screen'>
-        <div
-            className='h-screen w-[33vw] bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center'
-            style={{ backgroundImage: `url(${image})` }}
-            >
+    <div className="flex h-screen">
+      <div
+        className="h-screen w-[33vw] bg-cover flex flex-col items-center justify-center"
+        style={{ backgroundImage: `url(${image})` }}
+      >
+        <img src={logo} className="w-20" />
+        <h1 className="text-white text-3xl font-bold">Uzzi Bites</h1>
+        <p className="text-gray-300">Admin Portal</p>
+      </div>
 
-            <img src={logo} alt="Uzzi Bites Logo" className='object-contain' />
-            <h1 className='text-[#FFFFFF] text-[36px] font-bold '>Uzzi Bites</h1>
-            <p className='text-[#9CA3AF] text-[18px] font-medium '>Admin Portal</p>
-        </div>
+      <div className="flex items-center justify-center flex-1">
+        <form onSubmit={handleLogin} className="flex flex-col gap-4 w-[300px]">
+          <h1 className="text-2xl font-bold">Welcome Back</h1>
 
-        <div className='flex items-center justify-center flex-1'>
-            <form action="login" method="POST" className=' flex flex-col'>
-                <h1 className='text-[#222222] text-[30px] font-bold '>Welcome Back!</h1>
-                <p className='text-[#6B7280] text-[16px] '>Please Login to your account</p>
-                
-                <div className='mt-10 flex flex-col gap-6'>
-                    <input className='bg-[#FFFFFF] border border-[#E8ECEF] text-[#9CA3AF] text-[16px] py-3 px-4 rounded-2xl' type="text" placeholder="Email Address" />
-                    <input className='bg-[#FFFFFF] border border-[#E8ECEF] text-[#9CA3AF] text-[16px] py-3 px-4 rounded-2xl' type="password" placeholder="Password" />
-                    
-                    <div className='flex gap-2 items-center'>
-                        <input type="checkbox" className="appearance-none w-4 h-4 border border-red-500 rounded checked:bg-red-500 checked:border-red-500" id="remember" name="remember" />
-                        <label htmlFor="remember" className='text-[16px]'>Remember Me</label>
-                    </div>
+          <input
+            name="username"
+            placeholder="Username"
+            onChange={handleChange}
+            className="border p-3 rounded-xl"
+          />
 
-                    <button type="submit" className='text-[16px] font-semibold bg-[#E63946] text-white rounded-2xl py-2 '>Login</button>
-                </div>
-            </form>
-        </div>
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            onChange={handleChange}
+            className="border p-3 rounded-xl"
+          />
+
+          <button className="bg-red-500 text-white py-3 rounded-xl">
+            Login
+          </button>
+        </form>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

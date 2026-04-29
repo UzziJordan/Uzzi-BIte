@@ -1,9 +1,3 @@
-/*(Admin creates table accounts)
-
-What it contains:
-Create users (tables)
-Maybe delete users later
-
 const User = require("../models/User");
 
 // 1. CREATE TABLE ACCOUNT - ADMIN ONLY
@@ -18,10 +12,9 @@ exports.createUser = async (req, res) => {
 
     // 3. CREATE TABLE USER
     const user = await User.create({ 
-      username: `table${tableNumber}`,
       tableNumber,
       role: "table" 
-      // NO PASSWORD FOR TABLES
+      // NO PASSWORD FOR TABLES as per loginTable controller
     })
     
     res.status(201).json(user)
@@ -37,7 +30,7 @@ exports.createUser = async (req, res) => {
 // 4. GET ALL USERS - ADMIN ONLY
 exports.getUsers = async (req, res) => {
   try {
-    const users = await User.find()
+    const users = await User.find({ role: "table" })
     res.status(200).json(users)
   } catch (error) {
     console.error(error)
@@ -45,25 +38,14 @@ exports.getUsers = async (req, res) => {
   } 
 };
 
-// 5. SEED CONSTANT ADMIN - RUN ONCE ON SERVER START
-exports.createDefaultAdmin = async () => {
+// DELETE USER - ADMIN ONLY
+exports.deleteUser = async (req, res) => {
   try {
-    const adminExists = await User.findOne({ role: "admin" })
-    if (adminExists) {
-      console.log("Admin already exists")
-      return
-    }
-
-    // 6. CREATE ADMIN WITH PLAIN TEXT PASSWORD
-    await User.create({
-      username: "admin",
-      password: "admin123", // PLAIN TEXT - FIX THIS LATER
-      role: "admin"
-    })
-    console.log("Default admin created: admin / admin123")
+    const { id } = req.params;
+    await User.findByIdAndDelete(id);
+    res.status(200).json({ message: "Table deleted" })
   } catch (error) {
-    console.error("Error creating admin:", error)
+    console.error(error)
+    res.status(500).json({ message: error.message })
   }
-}
-
-*/
+};

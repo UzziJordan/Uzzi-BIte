@@ -1,10 +1,108 @@
-//Create table accounts
-import React from 'react'
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { FiPlus, FiCopy, FiTrash2 } from "react-icons/fi";
+import { useAuth } from "../context/AuthContext";
+
+const API = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 
 const Tables = () => {
-  return (
-    <div>Tables</div>
-  )
-}
+  const [tables, setTables] = useState([]);
+  const [newTableNumber, setNewTableNumber] = useState("");
+  const { token } = useAuth();
 
-export default Tables
+  const fetchTables = async () => {
+    try {
+      const res = await axios.get(`${API}/api/users`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setTables(res.data);
+    } catch (err) {
+      console.error("Error fetching tables:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchTables();
+  }, [token]);
+
+  const handleAddTable = async () => {
+    if (!newTableNumber) return;
+    try {
+      await axios.post(`${API}/api/users`, 
+        { tableNumber: Number(newTableNumber) },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setNewTableNumber("");
+      fetchTables();
+    } catch (err) {
+      alert(err.response?.data?.message || "Error adding table");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Delete this table account?")) {
+      try {
+        await axios.delete(`${API}/api/users/${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        fetchTables();
+      } catch (err) {
+        console.error("Error deleting table:", err);
+      }
+    }
+  };
+
+  const handleCopy = (num) => {
+    navigator.clipboard.writeText(num.toString());
+    alert(`Table ${num} number copied!`);
+  };
+
+  return (
+    <div className="p-6 bg-[#F9FAFB] min-h-screen">
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-[22px] font-semibold">Tables</h1>
+
+        <div className="flex gap-2">
+          <input 
+            type="number"
+            placeholder="Table Number"
+            value={newTableNumber}
+            onChange={(e) => setNewTableNumber(e.target.value)}
+            className="border rounded-lg px-3 py-2 text-sm w-32"
+          />
+          <button 
+            onClick={handleAddTable}
+            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-[14px]"
+          >
+            <FiPlus /> Add Table
+          </button>
+        </div>
+      </div>
+
+      {/* TABLE CONTAINER */}
+      <div className="bg-white rounded-2xl border overflow-hidden">
+        <div className="grid grid-cols-3 px-6 py-4 text-[#9CA3AF] text-[13px] border-b font-medium uppercase tracking-wider">
+          <p>Table No.</p>
+          <p>Role</p>
+          <p className="text-right">Actions</p>
+        </div>
+
+        <div className="divide-y">
+          {tables.map((table) => (
+            <div key={table._id} className="grid grid-cols-3 items-center px-6 py-4 text-[14px]">
+              <p className="font-semibold text-gray-800">Table {table.tableNumber}</p>
+              <p className="text-gray-500 capitalize">{table.role}</p>
+              <div className="flex justify-end gap-4 text-[#9CA3AF]">
+                <FiCopy onClick={() => handleCopy(table.tableNumber)} className="cursor-pointer hover:text-blue-500" />
+                <FiTrash2 onClick={() => handleDelete(table._id)} className="cursor-pointer hover:text-red-500" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Tables;

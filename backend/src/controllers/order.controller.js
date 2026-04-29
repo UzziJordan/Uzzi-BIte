@@ -148,3 +148,23 @@ exports.getOrderById = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// DELETE ORDER (ADMIN)
+exports.deleteOrder = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const order = await Order.findByIdAndDelete(id);
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    const io = req.app.get("io");
+    io.emit("orderDeleted", id);
+
+    res.status(200).json({ message: "Order deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+};

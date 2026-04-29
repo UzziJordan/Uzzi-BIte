@@ -3,6 +3,7 @@ const cors = require("cors");
 const mealRoutes = require("./routes/meal.routes");
 const authRoutes = require("./routes/auth.routes");
 const orderRoutes = require("./routes/order.routes");
+const userRoutes = require("./routes/user.routes");
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use((err, req, res, next) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/meals", mealRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/users", userRoutes);
 
 // test route
 app.get("/", (req, res) => {
