@@ -61,10 +61,11 @@ const Menu = () => {
   };
 
   // ✅ filter meals
-  const filteredMeals =
-    activeCategory === "All"
-      ? meals
-      : meals.filter((meal) => meal.category === activeCategory);
+  const filteredMeals = meals.filter((meal) => {
+    const matchesCategory = activeCategory === "All" || meal.category === activeCategory;
+    const isAvailable = meal.available !== false; // handle legacy data where available might be undefined
+    return matchesCategory && isAvailable;
+  });
 
   return (
     <div className="bg-[#FBF9FA] min-h-screen">

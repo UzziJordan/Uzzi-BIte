@@ -7,17 +7,25 @@ const MealForm = ({ onClose, onSave, initialData }) => {
     category: "",
     price: "",
     image: "",
+    available: true,
   });
 
   // PREFILL FOR EDIT
   useEffect(() => {
     if (initialData) {
-      setForm(initialData);
+      setForm({
+        ...initialData,
+        available: initialData.available !== undefined ? initialData.available : true
+      });
     }
   }, [initialData]);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value, type, checked } = e.target;
+    setForm({ 
+      ...form, 
+      [name]: type === "checkbox" ? checked : value 
+    });
   };
 
   const handleImageUpload = (e) => {
@@ -126,6 +134,20 @@ const MealForm = ({ onClose, onSave, initialData }) => {
                   onChange={handleChange}
                   className="w-full border rounded-lg px-3 py-2"
                 />
+              </div>
+
+              <div className="flex items-center gap-2 mt-1">
+                <input
+                  type="checkbox"
+                  name="available"
+                  id="available"
+                  checked={form.available}
+                  onChange={handleChange}
+                  className="w-4 h-4 accent-[#E63946]"
+                />
+                <label htmlFor="available" className="text-[14px] font-medium text-gray-700 cursor-pointer">
+                  Available for orders
+                </label>
               </div>
 
             </div>

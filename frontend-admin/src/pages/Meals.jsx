@@ -74,15 +74,44 @@ const Meals = () => {
 
       <div className="grid grid-cols-4 gap-4 mt-6">
         {meals.map((meal) => (
-          <div key={meal._id} className="bg-white p-4 rounded shadow">
-            <img src={meal.image} className="h-24 w-full object-cover" />
-            <p>{meal.name}</p>
-            <p>{meal.category}</p>
-            <p>₦{meal.price}</p>
+          <div key={meal._id} className={`bg-white p-4 rounded-xl shadow-sm border transition-all ${!meal.available ? "opacity-60 bg-gray-50 grayscale-[0.5]" : "hover:border-red-100"}`}>
+            <div className="relative">
+              <img src={meal.image} className="h-32 w-full object-cover rounded-lg mb-3" />
+              {!meal.available && (
+                <div className="absolute top-2 right-2 bg-gray-800/80 text-white text-[10px] px-2 py-1 rounded font-bold uppercase tracking-wider">
+                  Out of Stock
+                </div>
+              )}
+            </div>
+            
+            <div className="flex justify-between items-start mb-1">
+              <h3 className="font-bold text-gray-800 line-clamp-1">{meal.name}</h3>
+              <span className="text-[10px] bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full whitespace-nowrap">
+                {meal.category}
+              </span>
+            </div>
+            
+            <p className="font-bold text-red-500 mb-3">₦{meal.price.toLocaleString()}</p>
 
-            <div className="flex gap-2 mt-2">
-              <FiEdit onClick={() => { setEditingMeal(meal); setShowForm(true); }} />
-              <FiTrash2 onClick={() => handleDelete(meal._id)} />
+            <div className="flex justify-between items-center pt-3 border-t">
+               <span className={`text-[11px] font-bold uppercase tracking-tight ${meal.available ? "text-green-500" : "text-gray-400"}`}>
+                  {meal.available ? "● Available" : "○ Hidden"}
+               </span>
+
+              <div className="flex gap-2">
+                <button 
+                  onClick={() => { setEditingMeal(meal); setShowForm(true); }}
+                  className="p-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
+                >
+                  <FiEdit size={16} />
+                </button>
+                <button 
+                  onClick={() => handleDelete(meal._id)}
+                  className="p-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
+                >
+                  <FiTrash2 size={16} />
+                </button>
+              </div>
             </div>
           </div>
         ))}
