@@ -33,6 +33,27 @@ const SessionManager = () => {
     window.addEventListener("scroll", updateActivity);
 
     const interval = setInterval(async () => {
+      // 1. Check if session was ended by admin (table is no longer occupied)
+      try {
+        const res = await axios.get(`${API}/api/users/profile`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        if (!res.data.isOccupied) {
+          logout();
+          window.location.href = "/login";
+          return;
+        }
+      } catch (err) {
+        if (err.response?.status === 401 || err.response?.status === 404) {
+          logout();
+          window.location.href = "/login";
+          return;
+        }
+        console.error("Session check failed:", err);
+      }
+
+      // 2. Original Inactivity Check
       const inactive = Date.now() - lastActivity;
 
       if (inactive > 300000) {

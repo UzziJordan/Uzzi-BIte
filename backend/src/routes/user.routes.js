@@ -10,7 +10,7 @@ router.delete("/:id", verifyToken, isAdmin, deleteUser);
 router.patch("/:id/reset", verifyToken, isAdmin, resetTableStatus);
 
 // Profile routes
-router.get("/profile", verifyToken, isAdmin, getProfile);
+router.get("/profile", verifyToken, getProfile);
 router.put("/profile", verifyToken, isAdmin, updateProfile);
 router.delete("/profile/delete", verifyToken, isAdmin, deleteProfile);
 
