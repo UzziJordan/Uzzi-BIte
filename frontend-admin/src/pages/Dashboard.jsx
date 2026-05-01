@@ -87,13 +87,14 @@ const Dashboard = () => {
 
         {/* RECENT ORDERS */}
         <div className="bg-white rounded-2xl border border-[#E8ECEF] mt-8">
-            <div className="flex justify-between items-center p-5 border-b">
+            <div className="flex justify-between items-center p-5 border-b border-[#E8ECEF]">
                 <h2 className="font-semibold text-[16px]">Recent Orders</h2>
             </div>
 
-            <div className="grid grid-cols-5 px-5 py-3 text-[#9CA3AF] text-[13px] border-b">
+            <div className="grid grid-cols-6 px-5 bg-[#F9FAFB] py-3 text-[#9CA3AF] text-[13px] border-b border-[#E8ECEF]">
                 <p>Order ID</p>
                 <p>Table</p>
+                <p>Items</p>
                 <p>Status</p>
                 <p>Total</p>
                 <p>Time</p>
@@ -101,17 +102,22 @@ const Dashboard = () => {
 
             <div className="divide-y text-[14px]">
                 {recentOrders.map(order => (
-                    <div key={order._id} className="grid grid-cols-5 px-5 py-4 items-center">
-                        <p>#{order._id.slice(-6).toUpperCase()}</p>
+                    <div key={order._id} className="grid grid-cols-6 px-5 py-4 items-center">
+                        <p className="font-medium text-gray-700">#{order._id.slice(-6).toUpperCase()}</p>
                         <p>Table {order.table?.tableNumber || "N/A"}</p>
+                        
+                        <p className="truncate text-gray-500 text-[12px]" title={order.items.map(i => `${i.meal?.name} x${i.quantity}`).join(", ")}>
+                          {order.items.map(i => `${i.meal?.name} x${i.quantity}`).join(", ")}
+                        </p>
+
                         <span className={`px-3 py-1 rounded-full text-xs w-fit ${
                             order.status === "pending" ? "bg-yellow-100 text-yellow-600" :
                             order.status === "preparing" ? "bg-blue-100 text-blue-600" : "bg-green-100 text-green-600"
                         }`}>
                             {order.status}
                         </span>
-                        <p>₦{order.totalPrice}</p>
-                        <p>{new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                        <p className="font-bold">₦{order.totalPrice.toLocaleString()}</p>
+                        <p className="text-gray-400">{new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                     </div>
                 ))}
             </div>

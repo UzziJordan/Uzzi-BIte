@@ -121,7 +121,7 @@ const Orders = () => {
               key={f} 
               onClick={() => setFilter(f)}
               className={`px-4 py-2 rounded-lg capitalize ${
-                filter === f ? "bg-red-500 text-white" : "bg-white border"
+                filter === f ? "bg-red-500 text-white" : "bg-white border border-gray-300 hover:bg-gray-100"
               }`}
             >
               {f}

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import Video from "../assets/Uzzibites.mp4";
-import Logo from "../assets/logo.svg";
+import Logo from "../assets/Container.svg";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -39,12 +39,12 @@ const Onboarding = () => {
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="mb-6"
+          className="mb"
         >
           <img
             src={Logo}
             alt="Uzzi Bites Logo"
-            className="h-24 w-24 object-contain"
+            className="size-40 object-contain"
           />
         </motion.div>
 

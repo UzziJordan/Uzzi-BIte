@@ -45,7 +45,7 @@ const OrderCard = ({ order, onCancel, onAction }) => {
   };
 
   return (
-    <div className="bg-white rounded-2xl p-5 border shadow-sm w-[280px]">
+    <div className="bg-white rounded-2xl p-5 border border-[#E8ECEF] shadow-sm w-70">
 
       {/* HEADER */}
       <div className="flex justify-between items-center mb-3">

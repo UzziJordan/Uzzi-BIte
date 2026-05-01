@@ -73,14 +73,14 @@ const Meals = () => {
     <div className="p-6">
       <button
         onClick={() => setShowForm(true)}
-        className="bg-red-500 text-white px-4 py-2 rounded"
+        className="bg-red-500 text-white px-4 py-2 rounded flex items-center gap-2 hover:bg-red-600 transition-colors"
       >
-        <FiPlus /> Add Meal
+        <FiPlus /> <span>Add Meal</span>
       </button>
 
       <div className="grid grid-cols-4 gap-4 mt-6">
         {meals.map((meal) => (
-          <div key={meal._id} className={`bg-white p-4 rounded-xl shadow-sm border transition-all ${!meal.available ? "opacity-60 bg-gray-50 grayscale-[0.5]" : "hover:border-red-100"}`}>
+          <div key={meal._id} className={`bg-white p-4 rounded-xl shadow-sm border border-[#E8ECEF] transition-all ${!meal.available ? "opacity-60 bg-gray-50 grayscale-[0.5]" : "hover:border-red-100"}`}>
             <div className="relative">
               <img src={meal.image} className="h-32 w-full object-cover rounded-lg mb-3" />
               {!meal.available && (

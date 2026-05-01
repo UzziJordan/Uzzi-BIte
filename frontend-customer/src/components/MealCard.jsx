@@ -14,8 +14,8 @@ const MealCard = ({ meal, addToCart }) => {
         <p className="text-gray-500 text-sm">₦{meal.price}</p>
 
         <button
-          onClick={() => addToCart(meal)}
-          className="mt-2 w-full bg-red-500 text-white py-1 rounded hover:bg-red-600"
+          onClick={(e) => addToCart(meal, e)}
+          className="mt-2 w-full bg-red-500 text-white py-1 rounded hover:bg-red-600 active:scale-95 transition-transform"
         >
           Add +
         </button>

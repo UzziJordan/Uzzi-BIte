@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+
+import logo from "../assets/logo 2.svg";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
@@ -55,7 +57,9 @@ const Login = () => {
       <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md text-center">
 
         {/* LOGO */}
-        <div className="mb-4 text-red-500 text-3xl">🍽️</div>
+        <div>
+          <img src={logo} alt="Uzzi Bitez Logo" className="size-24 mx-auto" />
+        </div>
 
         <h1 className="text-xl font-bold">Uzzi Bitez</h1>
         <p className="text-gray-500 text-sm mb-6">Restaurant</p>
@@ -71,11 +75,11 @@ const Login = () => {
             <button
               key={table}
               onClick={() => setSelectedTable(table)}
-              className={`py-3 rounded-lg border font-semibold
+              className={`py-3 rounded-lg border border-gray-300 font-semibold
                 ${
                   selectedTable === table
                     ? "bg-red-500 text-white"
-                    : "bg-gray-100 hover:bg-gray-200"
+                    : "bg-white hover:bg-gray-200"
                 }`}
             >
               {table}
