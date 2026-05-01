@@ -24,8 +24,7 @@ const mealSchema = new mongoose.Schema(
 
     category: {
       type: String,
-      required: true,
-      enum: ["Rice", "Burgers", "Pizza", "Swallow", "Drinks"]
+      required: true
     },
 
     image: {

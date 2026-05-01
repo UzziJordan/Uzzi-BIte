@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState } from 'react';
+import axios from 'axios';
 
 const AuthContext = createContext();
+const API = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -15,7 +17,14 @@ export const AuthProvider = ({ children }) => {
         setTokenState(newToken);
     };
 
-    const logout = () => {
+    const logout = async () => {
+        try {
+            await axios.post(`${API}/api/auth/logout`, {}, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+        } catch (err) {
+            console.error("Logout failed on server", err);
+        }
         setToken(null);
         localStorage.removeItem("placedOrderIds");
         setUser(null);

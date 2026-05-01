@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -8,7 +8,14 @@ const API = import.meta.env.VITE_API_URL;
 const Login = () => {
   const [selectedTable, setSelectedTable] = useState(null);
   const navigate = useNavigate();
-  const { setToken } = useAuth();
+  const { setToken, token } = useAuth();
+
+  // 👉 Redirect if already logged in
+  useEffect(() => {
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, [token, navigate]);
 
   // 👉 You can adjust number of tables here
   const tables = Array.from({ length: 12 }, (_, i) => i + 1);
@@ -33,7 +40,11 @@ const Login = () => {
 
     } catch (err) {
       console.error(err.response?.data || err.message);
-      alert("Table not found");
+      if (err.response?.status === 403) {
+        alert("Table is currently occupied. Please choose another or call staff.");
+      } else {
+        alert("Table not found or server error");
+      }
     }
   };
 

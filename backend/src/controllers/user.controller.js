@@ -1,33 +1,74 @@
 const User = require("../models/User");
 
-// 1. CREATE TABLE ACCOUNT - ADMIN ONLY
+// 1. CREATE TABLE OR ADMIN ACCOUNT - ADMIN ONLY
 exports.createUser = async (req, res) => {
   try {
-    const { tableNumber } = req.body
+    const { tableNumber, username, password, role } = req.body
     
-    // 2. VALIDATE INPUT
+    // Create Admin
+    if (role === "admin") {
+      if (!username || !password) {
+        return res.status(400).json({ message: "Username and password are required for admin" })
+      }
+      const admin = await User.create({ username, password, role: "admin" });
+      return res.status(201).json(admin);
+    }
+
+    // Create Table
     if (!tableNumber) {
       return res.status(400).json({ message: "tableNumber is required" })
     }
 
-    // 3. CREATE TABLE USER
     const user = await User.create({ 
       tableNumber,
       role: "table" 
-      // NO PASSWORD FOR TABLES as per loginTable controller
     })
     
     res.status(201).json(user)
   } catch (error) {
     console.error(error)
     if (error.code === 11000) {
-      return res.status(400).json({ message: "Table number already exists" })
+      return res.status(400).json({ message: "Username or Table number already exists" })
     }
     res.status(500).json({ message: error.message })
   }
 };
 
-// 4. GET ALL USERS - ADMIN ONLY
+// GET ADMIN PROFILE
+exports.getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// UPDATE ADMIN PROFILE
+exports.updateProfile = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "Admin not found" });
+    }
+
+    if (username) user.username = username;
+    if (password) user.password = password;
+
+    await user.save();
+    res.status(200).json({ message: "Profile updated successfully" });
+  } catch (error) {
+    console.error(error);
+    if (error.code === 11000) {
+      return res.status(400).json({ message: "Username already exists" });
+    }
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// 4. GET ALL TABLES - ADMIN ONLY
 exports.getUsers = async (req, res) => {
   try {
     const users = await User.find({ role: "table" })

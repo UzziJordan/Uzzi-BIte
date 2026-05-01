@@ -9,8 +9,16 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import DashBoardLayout from "./pages/DashBoardLayout";
 import axios from "axios";
 
-const API = import.meta.env.VITE_API_URL.replace(/\/$/, "");
+const API = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
 
+// ✅ Protected Route Component
+const ProtectedRoute = ({ children }) => {
+  const { token } = useAuth();
+  if (!token) return <Navigate to="/login" />;
+  return children;
+};
+
+// ✅ Session Manager to handle timeout
 const SessionManager = () => {
   const { token, logout } = useAuth();
   const [lastActivity, setLastActivity] = React.useState(Date.now());

@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { FiGrid, FiCoffee, FiClipboard, FiBox, FiLogOut } from "react-icons/fi";
+import { FiGrid, FiCoffee, FiClipboard, FiBox, FiLogOut, FiSettings } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
 
 
@@ -11,6 +11,7 @@ const navItems = [
   { name: "Meals", path: "/dashboard/meals", icon: <FiCoffee /> },
   { name: "Orders", path: "/dashboard/orders", icon: <FiClipboard /> },
   { name: "Tables", path: "/dashboard/tables", icon: <FiBox /> },
+  { name: "Settings", path: "/dashboard/settings", icon: <FiSettings /> },
 ];
 
 const Sidebar = () => {

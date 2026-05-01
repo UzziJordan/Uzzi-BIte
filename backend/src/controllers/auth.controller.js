@@ -53,6 +53,14 @@ exports.loginTable = async (req, res) => {
       return res.status(401).json({ message: "Invalid table" });
     }
 
+    if (user.isOccupied) {
+      return res.status(403).json({ message: "Table occupied" });
+    }
+
+    // Mark table as occupied
+    user.isOccupied = true;
+    await user.save();
+
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
@@ -63,5 +71,17 @@ exports.loginTable = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+// LOGOUT (Release Table)
+exports.logout = async (req, res) => {
+  try {
+    if (req.user && req.user.role === "table") {
+      await User.findByIdAndUpdate(req.user.id, { isOccupied: false });
+    }
+    res.json({ message: "Logged out successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
