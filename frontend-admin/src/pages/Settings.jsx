@@ -5,10 +5,10 @@ import { useAuth } from "../context/AuthContext";
 const API = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 
 const Settings = () => {
-  const { token } = useAuth();
+  const { token, logout } = useAuth();
   
   // Profile state
-  const [profile, setProfile] = useState({ username: "" });
+  const [profile, setProfile] = useState({ username: "", profilePicture: "" });
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
@@ -22,7 +22,10 @@ const Settings = () => {
         const res = await axios.get(`${API}/api/users/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setProfile({ username: res.data.username });
+        setProfile({ 
+          username: res.data.username,
+          profilePicture: res.data.profilePicture || ""
+        });
       } catch (err) {
         console.error(err);
       }
@@ -33,7 +36,10 @@ const Settings = () => {
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
     try {
-      const data = { username: profile.username };
+      const data = { 
+        username: profile.username,
+        profilePicture: profile.profilePicture 
+      };
       if (password) data.password = password;
 
       await axios.put(`${API}/api/users/profile`, data, {
@@ -43,6 +49,20 @@ const Settings = () => {
       setPassword("");
     } catch (err) {
       setMessage(err.response?.data?.message || "Error updating profile");
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (window.confirm("CRITICAL WARNING: Are you sure you want to delete your admin account? This action is permanent and you will be logged out immediately.")) {
+      try {
+        await axios.delete(`${API}/api/users/profile/delete`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        alert("Account deleted successfully.");
+        logout();
+      } catch (err) {
+        alert(err.response?.data?.message || "Error deleting account");
+      }
     }
   };
 
@@ -82,6 +102,16 @@ const Settings = () => {
               />
             </div>
             <div>
+              <p className="text-sm text-gray-500 mb-1">Profile Picture URL</p>
+              <input
+                type="text"
+                value={profile.profilePicture}
+                onChange={(e) => setProfile({ ...profile, profilePicture: e.target.value })}
+                className="w-full border rounded-xl px-4 py-2"
+                placeholder="https://example.com/image.jpg"
+              />
+            </div>
+            <div>
               <p className="text-sm text-gray-500 mb-1">New Password (leave blank to keep current)</p>
               <input
                 type="password"
@@ -96,6 +126,17 @@ const Settings = () => {
               Update Profile
             </button>
           </form>
+
+          <div className="mt-10 pt-6 border-t border-red-50">
+            <h3 className="text-red-600 font-bold mb-2">Danger Zone</h3>
+            <p className="text-sm text-gray-500 mb-4">Deleting your account will remove all your access to the admin panel.</p>
+            <button 
+              onClick={handleDeleteAccount}
+              className="w-full border border-red-600 text-red-600 py-3 rounded-xl font-bold hover:bg-red-50 transition-colors"
+            >
+              Delete My Account
+            </button>
+          </div>
         </div>
 
         {/* CREATE NEW ADMIN */}

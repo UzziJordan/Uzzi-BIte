@@ -38,6 +38,10 @@ const userSchema = new mongoose.Schema({
     unique: true,
     sparse: true
   },
+  profilePicture: {
+    type: String,
+    default: "https://i.pravatar.cc/150?u=admin"
+  },
   isOccupied: {
     type: Boolean,
     default: false

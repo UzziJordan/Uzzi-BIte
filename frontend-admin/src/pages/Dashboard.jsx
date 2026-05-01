@@ -7,18 +7,21 @@ const API = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 const Dashboard = () => {
   const [orders, setOrders] = useState([]);
   const [mealsCount, setMealsCount] = useState(0);
+  const [adminProfile, setAdminProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const { token } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [ordersRes, mealsRes] = await Promise.all([
+        const [ordersRes, mealsRes, profileRes] = await Promise.all([
           axios.get(`${API}/api/orders`, { headers: { Authorization: `Bearer ${token}` } }),
-          axios.get(`${API}/api/meals`)
+          axios.get(`${API}/api/meals`),
+          axios.get(`${API}/api/users/profile`, { headers: { Authorization: `Bearer ${token}` } })
         ]);
         setOrders(ordersRes.data);
         setMealsCount(mealsRes.data.length);
+        setAdminProfile(profileRes.data);
       } catch (err) {
         console.error("Error fetching dashboard data:", err);
       } finally {
@@ -44,8 +47,12 @@ const Dashboard = () => {
         <div className="flex justify-between items-center">
             <h1 className="text-[24px] font-bold text-[#222222]">Dashboard</h1>
             <div className="flex items-center gap-3">
-                <p className="text-[#222222] font-medium text-[14px]">Hello, Admin</p>
-                <img src="https://i.pravatar.cc/40" alt="avatar" className="w-9 h-9 rounded-full" />
+                <p className="text-[#222222] font-medium text-[14px]">Hello, {adminProfile?.username || "Admin"}</p>
+                <img 
+                  src={adminProfile?.profilePicture || "https://i.pravatar.cc/40"} 
+                  alt="avatar" 
+                  className="w-9 h-9 rounded-full object-cover border border-gray-200" 
+                />
             </div>
         </div>
 

@@ -47,7 +47,7 @@ exports.getProfile = async (req, res) => {
 // UPDATE ADMIN PROFILE
 exports.updateProfile = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, profilePicture } = req.body;
     const user = await User.findById(req.user.id);
 
     if (!user) {
@@ -56,6 +56,7 @@ exports.updateProfile = async (req, res) => {
 
     if (username) user.username = username;
     if (password) user.password = password;
+    if (profilePicture) user.profilePicture = profilePicture;
 
     await user.save();
     res.status(200).json({ message: "Profile updated successfully" });
@@ -64,6 +65,17 @@ exports.updateProfile = async (req, res) => {
     if (error.code === 11000) {
       return res.status(400).json({ message: "Username already exists" });
     }
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// DELETE OWN PROFILE
+exports.deleteProfile = async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.user.id);
+    res.status(200).json({ message: "Account deleted successfully" });
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ message: error.message });
   }
 };
