@@ -5,7 +5,7 @@ import Meals from "./pages/Meals.jsx";
 import Orders from "./pages/Orders.jsx";
 import Tables from "./pages/Tables.jsx";
 import Settings from "./pages/Settings.jsx";
-import Analytics from "./pages/Analytics.jsx";
+import Stats from "./pages/Stats.jsx";
 import DashBoardLayout from "./pages/DashBoardLayout.jsx";
 import { AuthProvider, useAuth } from "./context/AuthContext.jsx";
 
@@ -30,7 +30,7 @@ function App() {
             }
           >
             <Route index element={<Dashboard />} />
-            <Route path="analytics" element={<Analytics />} />
+            <Route path="analytics" element={<Stats />} />
             <Route path="meals" element={<Meals />} />
             <Route path="orders" element={<Orders />} />
             <Route path="tables" element={<Tables />} />
