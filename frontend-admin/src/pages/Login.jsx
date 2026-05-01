@@ -40,21 +40,23 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen">
+    <div className="flex flex-col md:flex-row h-screen bg-white">
       <div
-        className="h-[30vh] md:h-screen w-full md:w-[33vw] bg-cover flex flex-col items-center justify-center p-6 text-center"
+        className="relative h-[30vh] md:h-screen w-full md:w-[33vw] bg-cover bg-center flex flex-col items-center justify-center p-6 text-center"
         style={{ backgroundImage: `url(${image})` }}
       >
-        <div className="absolute inset-0 bg-black/40 md:hidden"></div>
+        {/* Dark Overlay - scoped to this div only */}
+        <div className="absolute inset-0 bg-black/50 md:bg-black/20"></div>
+        
         <div className="relative z-10 flex flex-col items-center">
-          <img src={logo} className="w-16 md:w-20" />
+          <img src={logo} className="w-16 md:w-20 mb-2" />
           <h1 className="text-white text-2xl md:text-3xl font-bold">Uzzi Bites</h1>
           <p className="text-gray-200 text-sm md:text-base">Admin Portal</p>
         </div>
       </div>
 
-      <div className="flex items-center justify-center flex-1 p-6">
-        <form onSubmit={handleLogin} className="flex flex-col gap-4 w-full max-w-sm">
+      <div className="flex items-center justify-center flex-1 p-6 md:p-12">
+        <form onSubmit={handleLogin} className="flex flex-col gap-4 w-full max-w-sm relative z-20">
           <h1 className="text-2xl font-bold">Welcome Back</h1>
           <p className="text-gray-500 text-sm mb-2">Please enter your details to sign in</p>
 
