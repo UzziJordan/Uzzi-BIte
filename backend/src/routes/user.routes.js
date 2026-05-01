@@ -2,11 +2,12 @@ const express = require("express");
 const router = express.Router();
 const { verifyToken, isAdmin } = require("../middleware/auth");
 const upload = require("../middleware/upload");
-const { createUser, getUsers, deleteUser, getProfile, updateProfile, deleteProfile } = require("../controllers/user.controller");
+const { createUser, getUsers, deleteUser, getProfile, updateProfile, deleteProfile, resetTableStatus } = require("../controllers/user.controller");
 
 router.post("/", verifyToken, isAdmin, createUser);
 router.get("/", verifyToken, isAdmin, getUsers);
 router.delete("/:id", verifyToken, isAdmin, deleteUser);
+router.patch("/:id/reset", verifyToken, isAdmin, resetTableStatus);
 
 // Profile routes
 router.get("/profile", verifyToken, isAdmin, getProfile);

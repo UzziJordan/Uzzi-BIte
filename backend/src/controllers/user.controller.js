@@ -102,3 +102,23 @@ exports.deleteUser = async (req, res) => {
     res.status(500).json({ message: error.message })
   }
 };
+
+// RESET TABLE STATUS - ADMIN ONLY
+exports.resetTableStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    
+    if (!user || user.role !== "table") {
+      return res.status(404).json({ message: "Table not found" });
+    }
+
+    user.isOccupied = false;
+    await user.save();
+
+    res.status(200).json({ message: "Table session ended successfully", user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+};
