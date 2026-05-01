@@ -3,6 +3,7 @@ import axios from "axios";
 import MealForm from "../components/MealForm";
 import { FiEdit, FiTrash2, FiPlus } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
+import LoadingScreen from "../components/LoadingScreen";
 
 const API = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 
@@ -10,6 +11,7 @@ const Meals = () => {
   const [meals, setMeals] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingMeal, setEditingMeal] = useState(null);
+  const [loading, setLoading] = useState(true);
   const { token } = useAuth();
 
   // FETCH
@@ -19,6 +21,8 @@ const Meals = () => {
       setMeals(res.data);
     } catch (err) {
       console.error("Error fetching meals:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -62,6 +66,8 @@ const Meals = () => {
       }
     }
   };
+
+  if (loading) return <LoadingScreen />;
 
   return (
     <div className="p-6">

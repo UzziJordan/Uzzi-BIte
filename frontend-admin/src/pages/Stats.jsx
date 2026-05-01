@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { FiTrendingUp, FiDollarSign, FiShoppingCart, FiCalendar } from "react-icons/fi";
+import LoadingScreen from "../components/LoadingScreen";
 
 const API = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 
@@ -63,7 +64,7 @@ const Stats = () => {
     .sort((a, b) => b.count - a.count)
     .slice(0, 5);
 
-  if (loading) return <div className="p-10">Loading stats...</div>;
+  if (loading) return <LoadingScreen />;
 
   return (
     <div className="p-8 bg-[#F9FAFB] min-h-screen">

@@ -3,12 +3,14 @@ import axios from "axios";
 import OrderCard from "../components/OrderCard";
 import { useAuth } from "../context/AuthContext";
 import { io } from "socket.io-client";
+import LoadingScreen from "../components/LoadingScreen";
 
 const API = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [filter, setFilter] = useState("all");
+  const [loading, setLoading] = useState(true);
   const { token } = useAuth();
 
   const fetchOrders = async () => {
@@ -19,6 +21,8 @@ const Orders = () => {
       setOrders(res.data);
     } catch (err) {
       console.error("Error fetching orders:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -105,6 +109,8 @@ const Orders = () => {
 
   const filtered =
     filter === "all" ? orders : orders.filter((o) => o.status === filter);
+
+  if (loading) return <LoadingScreen />;
 
   return (
     <div className="p-6">

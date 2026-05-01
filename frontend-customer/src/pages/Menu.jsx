@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import MealCard from "../components/MealCard";
 import Cart from "../components/Cart";
+import LoadingScreen from "../components/LoadingScreen";
 
 const API = import.meta.env.VITE_API_URL;
 
@@ -13,6 +14,7 @@ const Menu = () => {
   const [categories, setCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState("All");
   const [showCart, setShowCart] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { logout, tableNumber } = useAuth();
 
@@ -38,6 +40,8 @@ const Menu = () => {
 
       } catch (err) {
         console.error(err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -66,6 +70,8 @@ const Menu = () => {
     const isAvailable = meal.available !== false; // handle legacy data where available might be undefined
     return matchesCategory && isAvailable;
   });
+
+  if (loading) return <LoadingScreen />;
 
   return (
     <div className="bg-[#FBF9FA] min-h-screen">

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { FaUserCircle } from "react-icons/fa";
+import LoadingScreen from "../components/LoadingScreen";
 
 const API = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 
@@ -12,6 +13,7 @@ const Settings = () => {
   const [profile, setProfile] = useState({ username: "", profilePicture: "" });
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
 
   // New Admin state
@@ -30,6 +32,8 @@ const Settings = () => {
         });
       } catch (err) {
         console.error(err);
+      } finally {
+        setLoading(false);
       }
     };
     fetchProfile();
@@ -106,6 +110,8 @@ const Settings = () => {
       setAdminMessage(err.response?.data?.message || "Error creating admin");
     }
   };
+
+  if (loading) return <LoadingScreen />;
 
   return (
     <div className="p-8 bg-[#F9FAFB] min-h-screen">

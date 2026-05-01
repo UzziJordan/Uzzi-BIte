@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { FaUserCircle } from "react-icons/fa";
+import LoadingScreen from "../components/LoadingScreen";
 
 const API = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 
@@ -40,7 +41,7 @@ const Dashboard = () => {
 
   const recentOrders = orders.slice(0, 5);
 
-  if (loading) return <div className="p-10">Loading...</div>;
+  if (loading) return <LoadingScreen />;
 
   return (
     <div className="p-10 bg-white min-h-screen">
