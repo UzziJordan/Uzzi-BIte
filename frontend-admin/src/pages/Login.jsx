@@ -40,37 +40,47 @@ const Login = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex flex-col md:flex-row h-screen">
       <div
-        className="h-screen w-[33vw] bg-cover flex flex-col items-center justify-center"
+        className="h-[30vh] md:h-screen w-full md:w-[33vw] bg-cover flex flex-col items-center justify-center p-6 text-center"
         style={{ backgroundImage: `url(${image})` }}
       >
-        <img src={logo} className="w-20" />
-        <h1 className="text-white text-3xl font-bold">Uzzi Bites</h1>
-        <p className="text-gray-300">Admin Portal</p>
+        <div className="absolute inset-0 bg-black/40 md:hidden"></div>
+        <div className="relative z-10 flex flex-col items-center">
+          <img src={logo} className="w-16 md:w-20" />
+          <h1 className="text-white text-2xl md:text-3xl font-bold">Uzzi Bites</h1>
+          <p className="text-gray-200 text-sm md:text-base">Admin Portal</p>
+        </div>
       </div>
 
-      <div className="flex items-center justify-center flex-1">
-        <form onSubmit={handleLogin} className="flex flex-col gap-4 w-75">
+      <div className="flex items-center justify-center flex-1 p-6">
+        <form onSubmit={handleLogin} className="flex flex-col gap-4 w-full max-w-sm">
           <h1 className="text-2xl font-bold">Welcome Back</h1>
+          <p className="text-gray-500 text-sm mb-2">Please enter your details to sign in</p>
 
-          <input
-            name="username"
-            placeholder="Username"
-            onChange={handleChange}
-            className="border p-3 rounded-xl"
-          />
+          <div className="flex flex-col gap-1">
+            <p className="text-xs font-semibold text-gray-400 uppercase ml-1">Username</p>
+            <input
+              name="username"
+              placeholder="admin_username"
+              onChange={handleChange}
+              className="border p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+          </div>
 
-          <input
-            name="password"
-            type="password"
-            placeholder="Password"
-            onChange={handleChange}
-            className="border p-3 rounded-xl"
-          />
+          <div className="flex flex-col gap-1">
+            <p className="text-xs font-semibold text-gray-400 uppercase ml-1">Password</p>
+            <input
+              name="password"
+              type="password"
+              placeholder="••••••••"
+              onChange={handleChange}
+              className="border p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+          </div>
 
-          <button className="bg-red-500 text-white py-3 rounded-xl">
-            Login
+          <button className="bg-red-500 text-white py-4 rounded-xl font-bold shadow-lg shadow-red-200 hover:bg-red-600 transition-all mt-2 active:scale-95">
+            Sign In
           </button>
         </form>
       </div>

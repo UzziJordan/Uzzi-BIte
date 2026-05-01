@@ -83,7 +83,7 @@ const SessionManager = () => {
           console.error(err);
         }
       }
-    }, 30000);
+    }, 10000);
 
     return () => {
       clearInterval(interval);

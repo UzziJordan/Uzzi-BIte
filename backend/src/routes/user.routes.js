@@ -16,11 +16,20 @@ router.delete("/profile/delete", verifyToken, isAdmin, deleteProfile);
 
 // Upload profile picture
 router.post("/upload-avatar", verifyToken, isAdmin, upload.single("avatar"), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: "Please upload a file" });
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "Please upload a file" });
+    }
+    
+    // Detect protocol correctly behind proxies like Render
+    const protocol = req.headers["x-forwarded-proto"] || req.protocol;
+    const url = `${protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+    
+    res.status(200).json({ url });
+  } catch (error) {
+    console.error("Avatar upload error:", error);
+    res.status(500).json({ message: "Internal server error during upload" });
   }
-  const url = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
-  res.status(200).json({ url });
 });
 
 module.exports = router;

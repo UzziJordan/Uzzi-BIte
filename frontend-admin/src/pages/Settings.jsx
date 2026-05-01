@@ -76,7 +76,9 @@ const Settings = () => {
       setProfile({ ...profile, profilePicture: res.data.url });
       setMessage("Profile picture uploaded! Don't forget to click Update Profile.");
     } catch (err) {
-      setMessage("Error uploading image");
+      const errMsg = err.response?.data?.message || "Error uploading image";
+      setMessage(errMsg);
+      console.error("Upload error:", err);
     } finally {
       setUploading(false);
     }
