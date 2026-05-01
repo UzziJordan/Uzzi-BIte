@@ -11,7 +11,8 @@ const {
   getMyOrders,
   getOrderById,
   updateOrderStatus,
-  deleteOrder
+  deleteOrder,
+  clearServedOrders
 } = require("../controllers/order.controller");
 
 // import middleware
@@ -26,6 +27,9 @@ router.get("/", verifyToken, isAdmin, getOrders);
 
 // table gets their orders
 router.get("/my-orders", verifyToken, isTable, getMyOrders);
+
+// admin clears served orders
+router.delete("/clear-served", verifyToken, isAdmin, clearServedOrders);
 
 // get single order
 router.get("/:id", verifyToken, getOrderById);

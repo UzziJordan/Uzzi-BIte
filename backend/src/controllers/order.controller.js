@@ -168,3 +168,21 @@ exports.deleteOrder = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// DELETE ALL SERVED ORDERS (ADMIN)
+exports.clearServedOrders = async (req, res) => {
+  try {
+    const result = await Order.deleteMany({ status: "served" });
+    
+    const io = req.app.get("io");
+    io.emit("servedOrdersCleared");
+
+    res.status(200).json({ 
+      message: `${result.deletedCount} served orders cleared`,
+      count: result.deletedCount 
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+};

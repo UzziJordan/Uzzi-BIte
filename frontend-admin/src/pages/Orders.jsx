@@ -44,6 +44,10 @@ const Orders = () => {
       setOrders((prev) => prev.filter((order) => order._id !== deletedId));
     });
 
+    socket.on("servedOrdersCleared", () => {
+      setOrders((prev) => prev.filter((order) => order.status !== "served"));
+    });
+
     return () => {
       socket.disconnect();
     };
@@ -79,23 +83,52 @@ const Orders = () => {
     }
   };
 
+  const handleClearServed = async () => {
+    const servedOrders = orders.filter(o => o.status === "served");
+    if (servedOrders.length === 0) {
+      alert("No served orders to clear");
+      return;
+    }
+
+    if (window.confirm(`Are you sure you want to clear all ${servedOrders.length} served orders? This cannot be undone.`)) {
+      try {
+        await axios.delete(`${API}/api/orders/clear-served`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        // Socket will handle the removal from state
+      } catch (err) {
+        console.error("Error clearing served orders:", err);
+        alert("Failed to clear served orders");
+      }
+    }
+  };
+
   const filtered =
     filter === "all" ? orders : orders.filter((o) => o.status === filter);
 
   return (
     <div className="p-6">
-      <div className="flex gap-4 mb-6">
-        {["all", "pending", "preparing", "served"].map((f) => (
-          <button 
-            key={f} 
-            onClick={() => setFilter(f)}
-            className={`px-4 py-2 rounded-lg capitalize ${
-              filter === f ? "bg-red-500 text-white" : "bg-white border"
-            }`}
-          >
-            {f}
-          </button>
-        ))}
+      <div className="flex justify-between items-center mb-6">
+        <div className="flex gap-4">
+          {["all", "pending", "preparing", "served"].map((f) => (
+            <button 
+              key={f} 
+              onClick={() => setFilter(f)}
+              className={`px-4 py-2 rounded-lg capitalize ${
+                filter === f ? "bg-red-500 text-white" : "bg-white border"
+              }`}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
+
+        <button
+          onClick={handleClearServed}
+          className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 transition-colors flex items-center gap-2"
+        >
+          <span>🧹</span> Clear All Served
+        </button>
       </div>
 
       <div className="flex flex-wrap gap-4">
