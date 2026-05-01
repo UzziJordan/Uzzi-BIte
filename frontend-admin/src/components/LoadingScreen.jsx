@@ -4,7 +4,7 @@ import logo from "../assets/Background.png";
 
 const LoadingScreen = () => {
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white/60 backdrop-blur-md">
+    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-white/60 backdrop-blur-md">
       <div className="flex flex-col items-center">
         {/* Animated Logo */}
         <motion.div
