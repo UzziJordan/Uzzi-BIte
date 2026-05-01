@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { FiGrid, FiCoffee, FiClipboard, FiBox, FiLogOut, FiSettings } from "react-icons/fi";
+import { FiGrid, FiCoffee, FiClipboard, FiBox, FiLogOut, FiSettings, FiTrendingUp } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
 
 
@@ -8,6 +8,7 @@ import logo from "../assets/Background.png";
 
 const navItems = [
   { name: "Dashboard", path: "/dashboard", icon: <FiGrid />, end: true },
+  { name: "Analytics", path: "/dashboard/analytics", icon: <FiTrendingUp /> },
   { name: "Meals", path: "/dashboard/meals", icon: <FiCoffee /> },
   { name: "Orders", path: "/dashboard/orders", icon: <FiClipboard /> },
   { name: "Tables", path: "/dashboard/tables", icon: <FiBox /> },

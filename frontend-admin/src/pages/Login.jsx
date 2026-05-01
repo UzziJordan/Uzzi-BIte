@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import image from "../assets/loggin.jpg";
 import logo from "../assets/Background.png";
@@ -9,7 +9,13 @@ const API = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, token } = useAuth();
+
+  useEffect(() => {
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, [token, navigate]);
 
   const [form, setForm] = useState({
     username: "",

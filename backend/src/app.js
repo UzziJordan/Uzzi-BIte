@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const mealRoutes = require("./routes/meal.routes");
 const authRoutes = require("./routes/auth.routes");
 const orderRoutes = require("./routes/order.routes");
@@ -14,6 +15,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 // Handle JSON parsing errors
 app.use((err, req, res, next) => {

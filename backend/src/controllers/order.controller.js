@@ -104,7 +104,12 @@ exports.updateOrderStatus = async (req, res) => {
 // GET ALL ORDERS (ADMIN)
 exports.getOrders = async (req, res) => {
   try {
-    const orders = await Order.find()
+    const { includeCleared } = req.query;
+    
+    // Default to only showing non-cleared orders
+    const query = includeCleared === "true" ? {} : { isCleared: false };
+
+    const orders = await Order.find(query)
       .populate("table", "tableNumber")
       .populate("items.meal", "name price")
       .sort({ createdAt: -1 });
@@ -169,17 +174,20 @@ exports.deleteOrder = async (req, res) => {
   }
 };
 
-// DELETE ALL SERVED ORDERS (ADMIN)
+// DELETE ALL SERVED ORDERS (ADMIN) - Soft delete to keep stats
 exports.clearServedOrders = async (req, res) => {
   try {
-    const result = await Order.deleteMany({ status: "served" });
+    const result = await Order.updateMany(
+      { status: "served", isCleared: false },
+      { isCleared: true }
+    );
     
     const io = req.app.get("io");
     io.emit("servedOrdersCleared");
 
     res.status(200).json({ 
-      message: `${result.deletedCount} served orders cleared`,
-      count: result.deletedCount 
+      message: `${result.modifiedCount} served orders cleared from view`,
+      count: result.modifiedCount 
     });
   } catch (error) {
     console.error(error);

@@ -42,6 +42,10 @@ const OrderSchema = new mongoose.Schema(
       type: String,
       enum: ["pending", "preparing", "served"],
       default: "pending"
+    },
+    isCleared: {
+      type: Boolean,
+      default: false
     }
   },
   {

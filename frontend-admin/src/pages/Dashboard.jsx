@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import { FaUserCircle } from "react-icons/fa";
 
 const API = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 
@@ -15,7 +16,7 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         const [ordersRes, mealsRes, profileRes] = await Promise.all([
-          axios.get(`${API}/api/orders`, { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get(`${API}/api/orders?includeCleared=true`, { headers: { Authorization: `Bearer ${token}` } }),
           axios.get(`${API}/api/meals`),
           axios.get(`${API}/api/users/profile`, { headers: { Authorization: `Bearer ${token}` } })
         ]);
@@ -48,11 +49,15 @@ const Dashboard = () => {
             <h1 className="text-[24px] font-bold text-[#222222]">Dashboard</h1>
             <div className="flex items-center gap-3">
                 <p className="text-[#222222] font-medium text-[14px]">Hello, {adminProfile?.username || "Admin"}</p>
-                <img 
-                  src={adminProfile?.profilePicture || "https://i.pravatar.cc/40"} 
-                  alt="avatar" 
-                  className="w-9 h-9 rounded-full object-cover border border-gray-200" 
-                />
+                {adminProfile?.profilePicture ? (
+                  <img 
+                    src={adminProfile.profilePicture} 
+                    alt="avatar" 
+                    className="w-9 h-9 rounded-full object-cover border border-gray-200" 
+                  />
+                ) : (
+                  <FaUserCircle className="w-9 h-9 text-gray-300" />
+                )}
             </div>
         </div>
 

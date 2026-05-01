@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Menu from "./pages/Menu";
 import Onboarding from "./pages/Onboarding";
@@ -84,10 +84,32 @@ function App() {
         <Routes>
           <Route path="/" element={<Onboarding />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/order-success/:id" element={<OrderSuccess />} />
-          <Route path="/my-orders" element={<MyOrders />} />
+          
+          <Route 
+            path="/order-success/:id" 
+            element={
+              <ProtectedRoute>
+                <OrderSuccess />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/my-orders" 
+            element={
+              <ProtectedRoute>
+                <MyOrders />
+              </ProtectedRoute>
+            } 
+          />
 
-          <Route path="/dashboard" element={<DashBoardLayout />}>
+          <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute>
+                <DashBoardLayout />
+              </ProtectedRoute>
+            }
+          >
             <Route index element={<Menu />} />
           </Route>
         </Routes>

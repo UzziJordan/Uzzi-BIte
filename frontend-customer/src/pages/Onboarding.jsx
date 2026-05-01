@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import Video from "../assets/Uzzibites.mp4";
 import Logo from "../assets/logo.svg";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Onboarding = () => {
+  const { token } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, [token, navigate]);
+
   return (
     <div className="relative h-screen w-full overflow-hidden">
       {/* Background Video */}
