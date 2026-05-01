@@ -96,38 +96,42 @@ const Tables = () => {
 
       {/* TABLE CONTAINER */}
       <div className="bg-white rounded-2xl border overflow-hidden">
-        <div className="grid grid-cols-4 px-6 py-4 text-[#9CA3AF] text-[13px] border-b font-medium uppercase tracking-wider">
-          <p>Table No.</p>
-          <p>Role</p>
-          <p>Status</p>
-          <p className="text-right">Actions</p>
-        </div>
-
-        <div className="divide-y">
-          {tables.map((table) => (
-            <div key={table._id} className="grid grid-cols-4 items-center px-6 py-4 text-[14px]">
-              <p className="font-semibold text-gray-800">Table {table.tableNumber}</p>
-              <p className="text-gray-500 capitalize">{table.role}</p>
-              <p>
-                <span className={`px-2 py-1 rounded-full text-[12px] font-medium ${
-                  table.isOccupied ? "bg-red-100 text-red-600" : "bg-green-100 text-green-600"
-                }`}>
-                  {table.isOccupied ? "Occupied" : "Available"}
-                </span>
-              </p>
-              <div className="flex justify-end gap-4 text-[#9CA3AF]">
-                {table.isOccupied && (
-                  <FiLogOut 
-                    onClick={() => handleReset(table._id)} 
-                    className="cursor-pointer hover:text-orange-500" 
-                    title="End Session"
-                  />
-                )}
-                <FiCopy onClick={() => handleCopy(table.tableNumber)} className="cursor-pointer hover:text-blue-500" title="Copy Table Number" />
-                <FiTrash2 onClick={() => handleDelete(table._id)} className="cursor-pointer hover:text-red-500" title="Delete Table" />
-              </div>
+        <div className="overflow-x-auto">
+          <div className="min-w-[600px]">
+            <div className="grid grid-cols-4 px-6 py-4 text-[#9CA3AF] text-[13px] border-b font-medium uppercase tracking-wider">
+              <p>Table No.</p>
+              <p>Role</p>
+              <p>Status</p>
+              <p className="text-right">Actions</p>
             </div>
-          ))}
+
+            <div className="divide-y">
+              {tables.map((table) => (
+                <div key={table._id} className="grid grid-cols-4 items-center px-6 py-4 text-[14px]">
+                  <p className="font-semibold text-gray-800">Table {table.tableNumber}</p>
+                  <p className="text-gray-500 capitalize">{table.role}</p>
+                  <p>
+                    <span className={`px-2 py-1 rounded-full text-[12px] font-medium ${
+                      table.isOccupied ? "bg-red-100 text-red-600" : "bg-green-100 text-green-600"
+                    }`}>
+                      {table.isOccupied ? "Occupied" : "Available"}
+                    </span>
+                  </p>
+                  <div className="flex justify-end gap-4 text-[#9CA3AF]">
+                    {table.isOccupied && (
+                      <FiLogOut 
+                        onClick={() => handleReset(table._id)} 
+                        className="cursor-pointer hover:text-orange-500" 
+                        title="End Session"
+                      />
+                    )}
+                    <FiCopy onClick={() => handleCopy(table.tableNumber)} className="cursor-pointer hover:text-blue-500" title="Copy Table Number" />
+                    <FiTrash2 onClick={() => handleDelete(table._id)} className="cursor-pointer hover:text-red-500" title="Delete Table" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>

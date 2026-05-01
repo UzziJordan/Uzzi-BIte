@@ -70,7 +70,7 @@ const Login = () => {
         </p>
 
         {/* TABLE GRID */}
-        <div className="grid grid-cols-4 gap-3 mb-6">
+        <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 mb-6">
           {tables.map((table) => (
             <button
               key={table}

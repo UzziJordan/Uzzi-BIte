@@ -67,19 +67,19 @@ const Stats = () => {
   if (loading) return <LoadingScreen />;
 
   return (
-    <div className="p-8 bg-[#F9FAFB] min-h-screen">
-      <div className="flex justify-between items-center mb-8">
+    <div className="p-4 md:p-8 bg-[#F9FAFB] min-h-screen">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-[#222222]">Business Stats</h1>
-          <p className="text-gray-500 text-sm">Review your performance for {months[selectedMonth]} {selectedYear}</p>
+          <h1 className="text-xl md:text-2xl font-bold text-[#222222]">Business Stats</h1>
+          <p className="text-gray-500 text-xs md:text-sm">Review your performance for {months[selectedMonth]} {selectedYear}</p>
         </div>
 
-        <div className="flex gap-3">
-          <div className="relative">
+        <div className="flex gap-2 w-full md:w-auto">
+          <div className="relative flex-1 md:flex-none">
             <select 
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
-              className="appearance-none bg-white border border-[#E8ECEF] px-4 py-2 pr-10 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-red-500"
+              className="w-full appearance-none bg-white border border-[#E8ECEF] px-4 py-2 pr-10 rounded-xl text-xs md:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-red-500"
             >
               {months.map((month, index) => (
                 <option key={month} value={index}>{month}</option>
@@ -91,7 +91,7 @@ const Stats = () => {
           <select 
             value={selectedYear}
             onChange={(e) => setSelectedYear(e.target.value)}
-            className="bg-white border border-[#E8ECEF] px-4 py-2 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="bg-white border border-[#E8ECEF] px-3 md:px-4 py-2 rounded-xl text-xs md:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-red-500"
           >
             {years.map(year => (
               <option key={year} value={year}>{year}</option>
@@ -101,29 +101,29 @@ const Stats = () => {
       </div>
 
       {/* STAT CARDS */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E8ECEF]">
-          <div className="w-10 h-10 bg-green-50 text-green-600 rounded-lg flex items-center justify-center mb-4 text-xl">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-8">
+        <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-[#E8ECEF]">
+          <div className="w-8 h-8 md:w-10 md:h-10 bg-green-50 text-green-600 rounded-lg flex items-center justify-center mb-4 text-lg md:text-xl">
             <FiDollarSign />
           </div>
-          <p className="text-[#6B7280] text-sm font-medium">Monthly Revenue</p>
-          <h2 className="text-2xl font-bold mt-1">₦{totalRevenue.toLocaleString()}</h2>
+          <p className="text-[#6B7280] text-xs md:text-sm font-medium">Monthly Revenue</p>
+          <h2 className="text-xl md:text-2xl font-bold mt-1">₦{totalRevenue.toLocaleString()}</h2>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E8ECEF]">
-          <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center mb-4 text-xl">
+        <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-[#E8ECEF]">
+          <div className="w-8 h-8 md:w-10 md:h-10 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center mb-4 text-lg md:text-xl">
             <FiShoppingCart />
           </div>
-          <p className="text-[#6B7280] text-sm font-medium">Total Orders</p>
-          <h2 className="text-2xl font-bold mt-1">{totalOrders}</h2>
+          <p className="text-[#6B7280] text-xs md:text-sm font-medium">Total Orders</p>
+          <h2 className="text-xl md:text-2xl font-bold mt-1">{totalOrders}</h2>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E8ECEF]">
-          <div className="w-10 h-10 bg-purple-50 text-purple-600 rounded-lg flex items-center justify-center mb-4 text-xl">
+        <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-[#E8ECEF]">
+          <div className="w-8 h-8 md:w-10 md:h-10 bg-purple-50 text-purple-600 rounded-lg flex items-center justify-center mb-4 text-lg md:text-xl">
             <FiTrendingUp />
           </div>
-          <p className="text-[#6B7280] text-sm font-medium">Avg. Order Value</p>
-          <h2 className="text-2xl font-bold mt-1">₦{Math.round(averageOrderValue).toLocaleString()}</h2>
+          <p className="text-[#6B7280] text-xs md:text-sm font-medium">Avg. Order Value</p>
+          <h2 className="text-xl md:text-2xl font-bold mt-1">₦{Math.round(averageOrderValue).toLocaleString()}</h2>
         </div>
       </div>
 

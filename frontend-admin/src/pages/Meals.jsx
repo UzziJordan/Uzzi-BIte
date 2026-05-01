@@ -78,7 +78,7 @@ const Meals = () => {
         <FiPlus /> <span>Add Meal</span>
       </button>
 
-      <div className="grid grid-cols-4 gap-4 mt-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
         {meals.map((meal) => (
           <div key={meal._id} className={`bg-white p-4 rounded-xl shadow-sm border border-[#E8ECEF] transition-all ${!meal.available ? "opacity-60 bg-gray-50 grayscale-[0.5]" : "hover:border-red-100"}`}>
             <div className="relative">

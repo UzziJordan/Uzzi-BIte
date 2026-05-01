@@ -114,27 +114,27 @@ const Menu = () => {
       </AnimatePresence>
 
       {/* HEADER */}
-      <div className="flex justify-between items-center px-4 bg-white shadow sticky top-0 z-50">
+      <div className="flex justify-between items-center px-4 md:px-10 bg-white shadow sticky top-0 z-50">
         <div>
-          <img src={logo} alt="Uzzi Bitez Logo" className="size-22" />
+          <img src={logo} alt="Uzzi Bitez Logo" className="size-16 md:size-22" />
         </div>
 
         <div className="flex flex-col items-center">
             <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Table</span>
-            <span className="text-xl font-black text-gray-800 leading-none">{tableNumber || "N/A"}</span>
+            <span className="text-lg md:text-xl font-black text-gray-800 leading-none">{tableNumber || "N/A"}</span>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4">
           <button 
             onClick={() => navigate("/my-orders")}
-            className="text-sm font-medium text-gray-600 hover:text-red-500"
+            className="text-xs md:text-sm font-medium text-gray-600 hover:text-red-500"
           >
-            My Orders
+            Orders
           </button>
           
           <button 
             onClick={handleLogout}
-            className="text-sm font-medium text-red-500 border border-red-100 px-3 py-1 rounded-lg bg-red-50 hover:bg-red-100"
+            className="text-xs md:text-sm font-medium text-red-500 border border-red-100 px-2 md:px-3 py-1 rounded-lg bg-red-50 hover:bg-red-100"
           >
             Logout
           </button>
@@ -143,7 +143,7 @@ const Menu = () => {
             <motion.span 
               animate={cartItems.length > 0 ? { scale: [1, 1.3, 1] } : {}}
               transition={{ duration: 0.3 }}
-              className="text-xl block"
+              className="text-lg md:text-xl block"
             >
               🛒
             </motion.span>
@@ -158,28 +158,27 @@ const Menu = () => {
 
       {/* WELCOME BANNER */}
       <div style={{ backgroundImage: `url(${backk})` }} 
-            className="bg-cover relative bg-center h-48 flex items-center mx-4 my-4 px-4 rounded-lg shadow"
+            className="bg-cover relative bg-center h-36 md:h-48 flex items-center mx-4 my-4 px-6 md:px-10 rounded-lg shadow overflow-hidden"
         > 
-      <div className="absolute inset-0 bg-black/80 h-48 rounded-lg pointer-events-none"></div>
+        <div className="absolute inset-0 bg-black/80 h-full w-full pointer-events-none"></div>
         <div className="text-white text-left z-10">
-          <h1 className="text-[24px] font-bold"> Good Food <br /> Good Mood </h1>
-          <p className="text-[14px] text-[#aaacb1] mt-2">Fresh Ingredients, great taste <br />Delivered to your Table </p>
+          <h1 className="text-[20px] md:text-[24px] font-bold"> Good Food <br /> Good Mood </h1>
+          <p className="text-[12px] md:text-[14px] text-[#aaacb1] mt-2">Fresh Ingredients, great taste <br />Delivered to your Table </p>
         </div>
-
       </div>
 
 
       {/* ✅ CATEGORY FILTER */}
-      <div className="flex gap-3 overflow-x-auto p-4">
+      <div className="flex gap-3 overflow-x-auto p-4 md:px-10 no-scrollbar">
         {categories.map((cat) => (
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}
-            className={`px-4 py-2 rounded-full text-sm whitespace-nowrap
+            className={`px-4 py-2 rounded-full text-xs md:text-sm whitespace-nowrap transition-colors
               ${
                 activeCategory === cat
-                  ? "bg-red-500 text-white"
-                  : "bg-gray-200 text-gray-600"
+                  ? "bg-red-500 text-white shadow-md shadow-red-200"
+                  : "bg-white text-gray-600 border border-gray-100"
               }`}
           >
             {cat}
@@ -188,7 +187,7 @@ const Menu = () => {
       </div>
 
       {/* MEALS */}
-      <div className="grid grid-cols-4 gap-4 p-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4 md:px-10">
         {filteredMeals.map((meal) => (
           <MealCard key={meal._id} meal={meal} addToCart={(m, e) => addToCart(m, e)} />
         ))}

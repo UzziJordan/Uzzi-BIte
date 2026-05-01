@@ -99,7 +99,7 @@ const Cart = ({ cartItems, setCartItems, closeCart }) => {
         animate={{ x: 0 }}
         exit={{ x: "100%" }}
         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-        className="fixed right-0 top-0 w-80 md:w-96 h-full bg-white shadow-2xl z-60 flex flex-col"
+        className="fixed right-0 top-0 w-full sm:w-80 md:w-96 h-full bg-white shadow-2xl z-60 flex flex-col"
       >
         <div className="flex justify-between items-center p-6 border-b border-[#E8ECEF] ">
           <h2 className="font-bold text-xl">Your Cart ({cartItems.length})</h2>

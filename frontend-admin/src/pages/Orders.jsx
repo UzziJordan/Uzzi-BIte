@@ -113,15 +113,15 @@ const Orders = () => {
   if (loading) return <LoadingScreen />;
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex gap-4">
+    <div className="p-4 md:p-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <div className="flex flex-wrap gap-2 md:gap-4">
           {["all", "pending", "preparing", "served"].map((f) => (
             <button 
               key={f} 
               onClick={() => setFilter(f)}
-              className={`px-4 py-2 rounded-lg capitalize ${
-                filter === f ? "bg-red-500 text-white" : "bg-white border border-gray-300 hover:bg-gray-100"
+              className={`px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-sm md:text-base capitalize transition-colors ${
+                filter === f ? "bg-red-500 text-white" : "bg-white border border-gray-200 hover:bg-gray-50"
               }`}
             >
               {f}
@@ -131,13 +131,13 @@ const Orders = () => {
 
         <button
           onClick={handleClearServed}
-          className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 transition-colors flex items-center gap-2"
+          className="w-full sm:w-auto bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 transition-colors flex items-center justify-center gap-2 text-sm md:text-base"
         >
           <span>🧹</span> Clear All Served
         </button>
       </div>
 
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-4 justify-center sm:justify-start">
         {filtered.map((order) => (
           <OrderCard
             key={order._id}

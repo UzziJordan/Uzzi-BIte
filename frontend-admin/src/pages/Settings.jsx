@@ -114,10 +114,10 @@ const Settings = () => {
   if (loading) return <LoadingScreen />;
 
   return (
-    <div className="p-8 bg-[#F9FAFB] min-h-screen">
-      <h1 className="text-2xl font-bold mb-8 text-[#222222]">Settings</h1>
+    <div className="p-4 md:p-8 bg-[#F9FAFB] min-h-screen">
+      <h1 className="text-xl md:text-2xl font-bold mb-8 text-[#222222]">Settings</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
         
         {/* EDIT PROFILE */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E8ECEF]">

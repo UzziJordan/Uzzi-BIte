@@ -44,12 +44,12 @@ const Dashboard = () => {
   if (loading) return <LoadingScreen />;
 
   return (
-    <div className="p-10 bg-white min-h-screen">
+    <div className="p-4 md:p-10 bg-white min-h-screen">
         {/* HEADER */}
         <div className="flex justify-between items-center">
-            <h1 className="text-[24px] font-bold text-[#222222]">Dashboard</h1>
+            <h1 className="text-[20px] md:text-[24px] font-bold text-[#222222]">Dashboard</h1>
             <div className="flex items-center gap-3">
-                <p className="text-[#222222] font-medium text-[14px]">Hello, {adminProfile?.username || "Admin"}</p>
+                <p className="hidden sm:block text-[#222222] font-medium text-[14px]">Hello, {adminProfile?.username || "Admin"}</p>
                 {adminProfile?.profilePicture ? (
                   <img 
                     src={adminProfile.profilePicture} 
@@ -63,7 +63,7 @@ const Dashboard = () => {
         </div>
 
         {/* CARDS */}
-        <div className="grid grid-cols-4 gap-6 mt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mt-8">
             <div className="bg-white rounded-2xl p-6 border border-[#E8ECEF]">
                 <p className="text-[#6B7280] font-medium text-[14px]">Orders Today</p>
                 <h2 className="text-[24px] text-[#22222] font-bold mt-2">{ordersToday.length}</h2>
@@ -86,40 +86,44 @@ const Dashboard = () => {
         </div>
 
         {/* RECENT ORDERS */}
-        <div className="bg-white rounded-2xl border border-[#E8ECEF] mt-8">
+        <div className="bg-white rounded-2xl border border-[#E8ECEF] mt-8 overflow-hidden">
             <div className="flex justify-between items-center p-5 border-b border-[#E8ECEF]">
                 <h2 className="font-semibold text-[16px]">Recent Orders</h2>
             </div>
 
-            <div className="grid grid-cols-6 px-5 bg-[#F9FAFB] py-3 text-[#9CA3AF] text-[13px] border-b border-[#E8ECEF]">
-                <p>Order ID</p>
-                <p>Table</p>
-                <p>Items</p>
-                <p>Status</p>
-                <p>Total</p>
-                <p>Time</p>
-            </div>
-
-            <div className="divide-y text-[14px]">
-                {recentOrders.map(order => (
-                    <div key={order._id} className="grid grid-cols-6 px-5 py-4 items-center">
-                        <p className="font-medium text-gray-700">#{order._id.slice(-6).toUpperCase()}</p>
-                        <p>Table {order.table?.tableNumber || "N/A"}</p>
-                        
-                        <p className="truncate text-gray-500 text-[12px]" title={order.items.map(i => `${i.meal?.name} x${i.quantity}`).join(", ")}>
-                          {order.items.map(i => `${i.meal?.name} x${i.quantity}`).join(", ")}
-                        </p>
-
-                        <span className={`px-3 py-1 rounded-full text-xs w-fit ${
-                            order.status === "pending" ? "bg-yellow-100 text-yellow-600" :
-                            order.status === "preparing" ? "bg-blue-100 text-blue-600" : "bg-green-100 text-green-600"
-                        }`}>
-                            {order.status}
-                        </span>
-                        <p className="font-bold">₦{order.totalPrice.toLocaleString()}</p>
-                        <p className="text-gray-400">{new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+            <div className="overflow-x-auto">
+                <div className="min-w-175">
+                    <div className="grid grid-cols-6 px-5 bg-[#F9FAFB] py-3 text-[#9CA3AF] text-[13px] border-b border-[#E8ECEF]">
+                        <p>Order ID</p>
+                        <p>Table</p>
+                        <p>Items</p>
+                        <p>Status</p>
+                        <p>Total</p>
+                        <p>Time</p>
                     </div>
-                ))}
+
+                    <div className="divide-y text-[14px]">
+                        {recentOrders.map(order => (
+                            <div key={order._id} className="grid grid-cols-6 px-5 py-4 items-center">
+                                <p className="font-medium text-gray-700">#{order._id.slice(-6).toUpperCase()}</p>
+                                <p>Table {order.table?.tableNumber || "N/A"}</p>
+                                
+                                <p className="truncate text-gray-500 text-[12px]" title={order.items.map(i => `${i.meal?.name} x${i.quantity}`).join(", ")}>
+                                  {order.items.map(i => `${i.meal?.name} x${i.quantity}`).join(", ")}
+                                </p>
+
+                                <span className={`px-3 py-1 rounded-full text-xs w-fit ${
+                                    order.status === "pending" ? "bg-yellow-100 text-yellow-600" :
+                                    order.status === "preparing" ? "bg-blue-100 text-blue-600" : "bg-green-100 text-green-600"
+                                }`}>
+                                    {order.status}
+                                </span>
+                                <p className="font-bold">₦{order.totalPrice.toLocaleString()}</p>
+                                <p className="text-gray-400">{new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
