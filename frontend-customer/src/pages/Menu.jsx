@@ -14,7 +14,7 @@ const Menu = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [showCart, setShowCart] = useState(false);
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, tableNumber } = useAuth();
 
   const handleLogout = () => {
     logout();
@@ -70,8 +70,13 @@ const Menu = () => {
     <div className="bg-[#FBF9FA] min-h-screen">
 
       {/* HEADER */}
-      <div className="flex justify-between items-center p-4 bg-white shadow">
-        <h1 className="font-bold text-lg">Uzzi Bitez</h1>
+      <div className="flex justify-between items-center p-4 bg-white shadow sticky top-0 z-50">
+        <h1 className="font-bold text-lg text-red-500">Uzzi Bitez</h1>
+
+        <div className="flex flex-col items-center">
+            <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Table</span>
+            <span className="text-xl font-black text-gray-800 leading-none">{tableNumber || "N/A"}</span>
+        </div>
 
         <div className="flex items-center gap-4">
           <button 

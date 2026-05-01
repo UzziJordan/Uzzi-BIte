@@ -5,14 +5,20 @@ const AuthContext = createContext();
 const API = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
     const [token, setTokenState] = useState(localStorage.getItem('token') || null);
+    const [tableNumber, setTableNumberState] = useState(localStorage.getItem('tableNumber') || null);
 
-    const setToken = (newToken) => {
+    const setToken = (newToken, number = null) => {
         if (newToken) {
             localStorage.setItem('token', newToken);
+            if (number) {
+                localStorage.setItem('tableNumber', number);
+                setTableNumberState(number);
+            }
         } else {
             localStorage.removeItem('token');
+            localStorage.removeItem('tableNumber');
+            setTableNumberState(null);
         }
         setTokenState(newToken);
     };
@@ -27,11 +33,10 @@ export const AuthProvider = ({ children }) => {
         }
         setToken(null);
         localStorage.removeItem("placedOrderIds");
-        setUser(null);
     };
 
     return (
-        <AuthContext.Provider value={{ user, setUser, token, setToken, logout }}>
+        <AuthContext.Provider value={{ tableNumber, token, setToken, logout }}>
             {children}
         </AuthContext.Provider>
     );

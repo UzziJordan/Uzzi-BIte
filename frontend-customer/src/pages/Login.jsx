@@ -30,7 +30,7 @@ const Login = () => {
         tableNumber: selectedTable,
       });
 
-      setToken(res.data.token);
+      setToken(res.data.token, selectedTable);
 
       // ✅ Clear previous session orders
       localStorage.removeItem("placedOrderIds");
