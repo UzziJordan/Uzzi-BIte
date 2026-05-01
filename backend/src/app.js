@@ -11,7 +11,7 @@ const app = express();
 // middleware
 app.use(cors({
   origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE"]
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"]
 }));
 
 app.use(express.json());
