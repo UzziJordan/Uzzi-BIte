@@ -37,9 +37,7 @@ const Cart = ({ cartItems, setCartItems, closeCart }) => {
     0
   );
 
-  // Service charge is calculated but not added to the total or displayed to the user
-  const serviceCharge = Math.floor(subtotal * 0.05);
-  const total = subtotal; // Service charge removed from total
+  const total = subtotal; 
 
   const placeOrder = async () => {
     try {

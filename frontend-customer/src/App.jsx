@@ -9,6 +9,8 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import DashBoardLayout from "./pages/DashBoardLayout";
 import axios from "axios";
 
+import { io } from "socket.io-client";
+
 const API = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
 
 // ✅ Protected Route Component
@@ -18,13 +20,24 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-// ✅ Session Manager to handle timeout
+// ✅ Session Manager to handle timeout and admin resets
 const SessionManager = () => {
-  const { token, logout } = useAuth();
+  const { token, logout, userId } = useAuth();
   const [lastActivity, setLastActivity] = React.useState(Date.now());
 
   React.useEffect(() => {
     if (!token) return;
+
+    // 1. Listen for Admin Reset via Sockets
+    const socket = io(API);
+    
+    socket.on("tableReset", (resetId) => {
+      if (resetId === userId) {
+        console.log("⚠️ Table session ended by admin");
+        logout();
+        window.location.href = "/login";
+      }
+    });
 
     const updateActivity = () => setLastActivity(Date.now());
 
@@ -32,66 +45,25 @@ const SessionManager = () => {
     window.addEventListener("keypress", updateActivity);
     window.addEventListener("scroll", updateActivity);
 
-    const interval = setInterval(async () => {
-      // 1. Check if session was ended by admin (table is no longer occupied)
-      try {
-        const res = await axios.get(`${API}/api/users/profile`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        
-        if (!res.data.isOccupied) {
-          logout();
-          window.location.href = "/login";
-          return;
-        }
-      } catch (err) {
-        if (err.response?.status === 401 || err.response?.status === 404) {
-          logout();
-          window.location.href = "/login";
-          return;
-        }
-        console.error("Session check failed:", err);
-      }
-
-      // 2. Original Inactivity Check
+    // 2. Inactivity Check (Simplified)
+    const interval = setInterval(() => {
       const inactive = Date.now() - lastActivity;
-
+      // 5 minutes of inactivity
       if (inactive > 300000) {
-        try {
-          const ids = JSON.parse(localStorage.getItem("placedOrderIds") || "[]");
-
-          if (ids.length === 0) return;
-
-          const res = await axios.get(`${API}/api/orders/my-orders`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-
-          const sessionOrders = res.data.filter((o) =>
-            ids.includes(o._id)
-          );
-
-          const allServed = sessionOrders.every(
-            (o) => o.status === "served"
-          );
-
-          if (allServed) {
-            logout();
-            localStorage.removeItem("placedOrderIds");
-            window.location.href = "/";
-          }
-        } catch (err) {
-          console.error(err);
-        }
+        logout();
+        localStorage.removeItem("placedOrderIds");
+        window.location.href = "/";
       }
-    }, 10000);
+    }, 60000); // Check every minute instead of every 10s
 
     return () => {
+      socket.disconnect();
       clearInterval(interval);
       window.removeEventListener("click", updateActivity);
       window.removeEventListener("keypress", updateActivity);
       window.removeEventListener("scroll", updateActivity);
     };
-  }, [token, lastActivity, logout]);
+  }, [token, lastActivity, logout, userId]);
 
   return null;
 };

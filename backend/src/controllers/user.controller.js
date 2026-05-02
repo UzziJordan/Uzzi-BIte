@@ -116,6 +116,9 @@ exports.resetTableStatus = async (req, res) => {
     user.isOccupied = false;
     await user.save();
 
+    const io = req.app.get("io");
+    io.emit("tableReset", id);
+
     res.status(200).json({ message: "Table session ended successfully", user });
   } catch (error) {
     console.error(error);

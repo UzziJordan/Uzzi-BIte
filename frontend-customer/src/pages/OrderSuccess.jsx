@@ -81,9 +81,11 @@ const OrderSuccess = () => {
         </h2>
 
         <p className="text-center text-gray-500 mt-1 mb-6">
-          {status === "pending" && "Your order has been received. The kitchen will start soon."}
+          {status === "pending" && "Waiting for staff to acknowledge your order..."}
+          {status === "accepted" && "Your order has been received! Staff will start soon."}
           {status === "preparing" && "Your meal is being prepared! 🍽️"}
-          {status === "served" && "Your order is ready! A staff will bring it to you."}
+          {status === "ready" && "Your order is ready to be served! 🎊"}
+          {status === "served" && "Your order has been served. Enjoy! 😋"}
         </p>
 
         {/* LOADING */}
@@ -92,18 +94,17 @@ const OrderSuccess = () => {
         ) : (
           <div className="space-y-6">
             {[
-              { key: "pending", label: "Order Received" },
+              { key: "accepted", label: "Order Received" },
               { key: "preparing", label: "Preparing" },
-              { key: "served", label: "Ready to Serve" },
+              { key: "ready", label: "Ready to Serve" },
             ].map((step, index, arr) => {
-              const orderFlow = ["pending", "preparing", "served"];
+              const orderFlow = ["pending", "accepted", "preparing", "ready", "served"];
               const currentIndex = orderFlow.indexOf(status);
               const stepIndex = orderFlow.indexOf(step.key);
 
               let state = "pending";
               
-              if (stepIndex < currentIndex) state = "completed";
-              else if (stepIndex === currentIndex) state = "completed";
+              if (stepIndex <= currentIndex) state = "completed";
               else if (stepIndex === currentIndex + 1) state = "active";
 
               return (
@@ -119,31 +120,34 @@ const OrderSuccess = () => {
                     className={`w-10 h-10 flex items-center justify-center rounded-full transition-all
                       ${
                         state === "completed"
-                          ? "bg-green-500 text-white"
+                          ? "bg-green-500 text-white shadow-md shadow-green-100"
                           : state === "active"
-                          ? step.key === "preparing"
-                            ? "bg-red-500 text-white animate-pulse"
-                            : "bg-red-500 text-white"
+                          ? "bg-red-500 text-white animate-pulse shadow-md shadow-red-100"
                           : "bg-gray-200 text-gray-400"
                       }
                     `}
                   >
-                    {state === "completed" ? "✓" : "•"}
+                    {state === "completed" ? "✓" : (index + 1)}
                   </div>
 
                   {/* TEXT */}
                   <div>
                     <p
-                      className={`font-medium ${
-                        state === "pending" ? "text-gray-400" : "text-black"
+                      className={`font-bold text-sm ${
+                        state === "pending" ? "text-gray-400" : "text-gray-800"
                       }`}
                     >
                       {step.label}
                     </p>
 
                     {state === "active" && (
-                      <span className="text-red-500 text-sm">
-                        In progress...
+                      <span className="text-red-500 text-[10px] font-bold uppercase tracking-wider">
+                        In progress
+                      </span>
+                    )}
+                    {state === "completed" && (
+                      <span className="text-green-500 text-[10px] font-bold uppercase tracking-wider">
+                        Done
                       </span>
                     )}
                   </div>
@@ -154,9 +158,11 @@ const OrderSuccess = () => {
         )}
 
         {status === "served" && (
-          <p className="text-green-500 text-center mt-6 font-semibold">
-            🎉 Your order has been served!
-          </p>
+          <div className="mt-6 p-4 bg-green-50 border border-green-100 rounded-2xl text-center">
+             <p className="text-green-600 font-bold text-sm">
+              🎉 Your order has been served!
+            </p>
+          </div>
         )}
 
         {/* ACTION BUTTONS */}

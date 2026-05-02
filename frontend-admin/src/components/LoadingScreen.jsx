@@ -1,42 +1,57 @@
 import React from "react";
 import { motion } from "framer-motion";
-import logo from "../assets/Background.png";
 
 const LoadingScreen = () => {
   return (
-    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-white/60 backdrop-blur-md">
+    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-white">
       <div className="flex flex-col items-center">
-        {/* Animated Logo */}
-        <motion.div
-          animate={{
-            scale: [1, 1.1, 1],
-            opacity: [0.8, 1, 0.8],
-          }}
-          transition={{
-            duration: 1.5,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="relative"
-        >
-          <img src={logo} alt="Uzzi Bitez" className="w-24 h-24 object-contain" />
+        {/* Minimalist Smooth Spinner */}
+        <div className="relative w-16 h-16">
+          {/* Static Track */}
+          <div className="absolute inset-0 rounded-full border-[3px] border-gray-100"></div>
           
-          {/* Outer Ring Animation */}
-          <motion.div 
-            animate={{ scale: [1, 1.5], opacity: [0.5, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="absolute inset-0 border-4 border-red-500 rounded-full"
-          />
-        </motion.div>
+          {/* Liquid Rotating Arc */}
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{
+              duration: 1,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+            className="absolute inset-0 rounded-full border-[3px] border-t-red-500 border-r-transparent border-b-transparent border-l-transparent"
+          ></motion.div>
 
-        <motion.p 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="mt-4 text-gray-800 font-bold tracking-widest uppercase text-xs"
+          {/* Second Offset Arc for Smoothness */}
+          <motion.div
+            animate={{ rotate: -360 }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+            className="absolute inset-2 rounded-full border-2 border-b-red-200 border-t-transparent border-r-transparent border-l-transparent opacity-50"
+          ></motion.div>
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 5 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.8 }}
+          className="mt-6 flex flex-col items-center"
         >
-          Uzzi Bitez
-        </motion.p>
-        <p className="text-gray-400 text-[10px] mt-1">Preparing your experience...</p>
+          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">
+            Uzzi Bitez
+          </span>
+          
+          {/* Minimalist Progress Indicator */}
+          <div className="mt-2 w-12 h-px bg-gray-100 overflow-hidden relative">
+            <motion.div 
+              animate={{ x: ["-100%", "100%"] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute inset-0 w-full h-full bg-red-400/30"
+            />
+          </div>
+        </motion.div>
       </div>
     </div>
   );

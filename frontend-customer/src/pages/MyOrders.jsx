@@ -35,12 +35,14 @@ const MyOrders = () => {
     fetchMyOrders();
   }, [token]);
 
-  const getStatusColor = (status) => {
+  const getStatusDisplay = (status) => {
     switch (status) {
-      case "pending": return "text-orange-500 bg-orange-50";
-      case "preparing": return "text-blue-500 bg-blue-50";
-      case "served": return "text-green-500 bg-green-50";
-      default: return "text-gray-500 bg-gray-50";
+      case "pending": return { label: "Pending", color: "text-orange-500 bg-orange-50" };
+      case "accepted": return { label: "Order Received", color: "text-purple-500 bg-purple-50" };
+      case "preparing": return { label: "Preparing", color: "text-blue-500 bg-blue-50" };
+      case "ready": return { label: "Ready to Served", color: "text-orange-500 bg-orange-50" };
+      case "served": return { label: "Served", color: "text-green-500 bg-green-50" };
+      default: return { label: status, color: "text-gray-500 bg-gray-50" };
     }
   };
 
@@ -58,11 +60,14 @@ const MyOrders = () => {
             + Place More
           </button>
         </div>
-
         {loading ? (
           <div className="flex flex-col items-center justify-center h-64">
-            <div className="w-8 h-8 border-4 border-red-500 border-t-transparent rounded-full animate-spin mb-2"></div>
-            <p className="text-gray-500">Loading your orders...</p>
+            <motion.div 
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+              className="w-10 h-10 border-2 border-gray-100 border-t-red-500 rounded-full mb-4"
+            />
+            <p className="text-gray-400 text-xs font-medium animate-pulse">Loading your orders...</p>
           </div>
         ) : orders.length === 0 ? (
           <div className="bg-white rounded-2xl p-8 text-center shadow-sm">
@@ -78,21 +83,23 @@ const MyOrders = () => {
           </div>
         ) : (
           <div className="space-y-4">
-            {orders.map((order) => (
-              <div 
-                key={order._id}
-                onClick={() => navigate(`/order-success/${order._id}`)}
-                className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 cursor-pointer hover:border-red-200 transition-all active:scale-95"
-              >
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <p className="text-xs text-gray-400 uppercase tracking-wider">Order ID</p>
-                    <p className="font-bold text-gray-800">#{order._id.slice(-6).toUpperCase()}</p>
+            {orders.map((order) => {
+              const statusInfo = getStatusDisplay(order.status);
+              return (
+                <div 
+                  key={order._id}
+                  onClick={() => navigate(`/order-success/${order._id}`)}
+                  className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 cursor-pointer hover:border-red-200 transition-all active:scale-95"
+                >
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <p className="text-xs text-gray-400 uppercase tracking-wider">Order ID</p>
+                      <p className="font-bold text-gray-800">#{order._id.slice(-6).toUpperCase()}</p>
+                    </div>
+                    <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${statusInfo.color}`}>
+                      {statusInfo.label}
+                    </span>
                   </div>
-                  <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${getStatusColor(order.status)}`}>
-                    {order.status}
-                  </span>
-                </div>
 
                 <div className="border-t border-dashed border-gray-100 pt-3 flex justify-between items-center">
                   <div className="text-sm text-gray-500">

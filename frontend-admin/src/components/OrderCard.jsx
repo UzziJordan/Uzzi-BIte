@@ -5,8 +5,12 @@ const OrderCard = ({ order, onCancel, onAction }) => {
     switch (order.status) {
       case "pending":
         return "bg-yellow-100 text-yellow-600";
+      case "accepted":
+        return "bg-purple-100 text-purple-600";
       case "preparing":
         return "bg-blue-100 text-blue-600";
+      case "ready":
+        return "bg-orange-100 text-orange-600";
       case "served":
         return "bg-green-100 text-green-600";
       default:
@@ -15,33 +19,50 @@ const OrderCard = ({ order, onCancel, onAction }) => {
   };
 
   const getActionButton = () => {
-    if (order.status === "pending") {
-      return (
-        <button
-          onClick={() => onAction(order.id)}
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg w-full"
-        >
-          Start Preparing
-        </button>
-      );
+    switch (order.status) {
+      case "pending":
+        return (
+          <button
+            onClick={() => onAction(order.id)}
+            className="bg-purple-500 text-white px-4 py-2 rounded-lg w-full text-sm font-bold"
+          >
+            Accept Order
+          </button>
+        );
+      case "accepted":
+        return (
+          <button
+            onClick={() => onAction(order.id)}
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg w-full text-sm font-bold"
+          >
+            Start Preparing
+          </button>
+        );
+      case "preparing":
+        return (
+          <button
+            onClick={() => onAction(order.id)}
+            className="bg-orange-500 text-white px-4 py-2 rounded-lg w-full text-sm font-bold"
+          >
+            Order Ready
+          </button>
+        );
+      case "ready":
+        return (
+          <button
+            onClick={() => onAction(order.id)}
+            className="bg-green-500 text-white px-4 py-2 rounded-lg w-full text-sm font-bold"
+          >
+            Mark as Served
+          </button>
+        );
+      default:
+        return (
+          <button className="bg-gray-200 text-gray-500 px-4 py-2 rounded-lg cursor-not-allowed w-full text-sm font-bold">
+            Completed
+          </button>
+        );
     }
-
-    if (order.status === "preparing") {
-      return (
-        <button
-          onClick={() => onAction(order.id)}
-          className="bg-green-500 text-white px-4 py-2 rounded-lg w-full"
-        >
-          Mark as Served
-        </button>
-      );
-    }
-
-    return (
-      <button className="bg-gray-200 text-gray-500 px-4 py-2 rounded-lg cursor-not-allowed w-full">
-        Completed
-      </button>
-    );
   };
 
   return (

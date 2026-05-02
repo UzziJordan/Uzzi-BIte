@@ -18,7 +18,8 @@ const Menu = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [showCart, setShowCart] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [flyingItems, setFlyingItems] = useState([]); // ✅ For animation
+  const [flyingItems, setFlyingItems] = useState([]); 
+  const cartIconRef = React.useRef(null); // ✅ Ref for accurate animation target
   const navigate = useNavigate();
   const { logout, tableNumber } = useAuth();
 
@@ -30,7 +31,7 @@ const Menu = () => {
   useEffect(() => {
     const fetchMeals = async () => {
       try {
-        const baseURL = API.replace(/\/$/, ""); // ✅ remove double slash
+        const baseURL = API.replace(/\/$/, ""); 
         const res = await axios.get(`${baseURL}/api/meals`);
 
         setMeals(res.data);
@@ -54,15 +55,23 @@ const Menu = () => {
 
   const addToCart = (meal, event) => {
     // capture click coordinates for animation
-    if (event) {
+    if (event && cartIconRef.current) {
       const { clientX, clientY } = event;
+      const targetRect = cartIconRef.current.getBoundingClientRect();
       const id = Date.now();
-      setFlyingItems((prev) => [...prev, { id, x: clientX, y: clientY }]);
+      
+      setFlyingItems((prev) => [...prev, { 
+        id, 
+        x: clientX, 
+        y: clientY,
+        targetX: targetRect.left + (targetRect.width / 2),
+        targetY: targetRect.top + (targetRect.height / 2)
+      }]);
       
       // remove from state after animation completes
       setTimeout(() => {
         setFlyingItems((prev) => prev.filter((i) => i.id !== id));
-      }, 800);
+      }, 700);
     }
 
     setCartItems((prev) => {
@@ -83,7 +92,7 @@ const Menu = () => {
   // ✅ filter meals
   const filteredMeals = meals.filter((meal) => {
     const matchesCategory = activeCategory === "All" || meal.category === activeCategory;
-    const isAvailable = meal.available !== false; // handle legacy data where available might be undefined
+    const isAvailable = meal.available !== false; 
     return matchesCategory && isAvailable;
   });
 
@@ -97,15 +106,15 @@ const Menu = () => {
         {flyingItems.map((item) => (
           <motion.div
             key={item.id}
-            initial={{ x: item.x, y: item.y, scale: 1, opacity: 1 }}
+            initial={{ x: item.x - 16, y: item.y - 16, scale: 1, opacity: 1 }}
             animate={{ 
-              x: window.innerWidth - 60, // target cart icon roughly
-              y: 40, 
-              scale: 0.2, 
-              opacity: 0 
+              x: item.targetX - 16,
+              y: item.targetY - 16, 
+              scale: 0.1, 
+              opacity: 0.5 
             }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.7, ease: "circIn" }}
+            transition={{ duration: 0.6, ease: "backIn" }}
             className="fixed top-0 left-0 w-8 h-8 bg-red-500 rounded-full z-9999 pointer-events-none shadow-lg flex items-center justify-center text-white font-bold"
           >
             +
@@ -139,16 +148,20 @@ const Menu = () => {
             Logout
           </button>
 
-          <button onClick={() => setShowCart(true)} className="relative">
+          <button 
+            ref={cartIconRef} // ✅ Attach ref here
+            onClick={() => setShowCart(true)} 
+            className="relative p-2"
+          >
             <motion.span 
-              animate={cartItems.length > 0 ? { scale: [1, 1.3, 1] } : {}}
+              animate={cartItems.length > 0 ? { scale: [1, 1.2, 1] } : {}}
               transition={{ duration: 0.3 }}
               className="text-lg md:text-xl block"
             >
               🛒
             </motion.span>
             {cartItems.length > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+              <span className="absolute top-0 right-0 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
                 {cartItems.length}
               </span>
             )}

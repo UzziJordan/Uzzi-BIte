@@ -45,10 +45,14 @@ exports.createOrder = async (req, res) => {
       totalPrice
     });
 
-    const io = req.app.get("io");
-    io.emit("newOrder", order);
+    const populatedOrder = await Order.findById(order._id)
+      .populate("table", "tableNumber")
+      .populate("items.meal", "name price");
 
-    res.status(201).json(order);
+    const io = req.app.get("io");
+    io.emit("newOrder", populatedOrder);
+
+    res.status(201).json(populatedOrder);
 
   } catch (error) {
     console.error(error);
@@ -61,7 +65,7 @@ exports.updateOrderStatus = async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
 
-    const validStatuses = ["pending", "preparing", "served"];
+    const validStatuses = ["pending", "accepted", "preparing", "ready", "served"];
 
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ message: "Invalid status" });
@@ -75,16 +79,23 @@ exports.updateOrderStatus = async (req, res) => {
 
     const currentStatus = order.status;
 
-    if (currentStatus === "pending" && status !== "preparing") {
-      return res.status(400).json({ message: "Invalid status transition" });
-    }
+    // Transition Logic:
+    // pending -> accepted
+    // accepted -> preparing
+    // preparing -> ready
+    // ready -> served
 
-    if (currentStatus === "preparing" && status !== "served") {
-      return res.status(400).json({ message: "Invalid status transition" });
-    }
+    const transitions = {
+      "pending": "accepted",
+      "accepted": "preparing",
+      "preparing": "ready",
+      "ready": "served"
+    };
 
-    if (currentStatus === "served") {
-      return res.status(400).json({ message: "Order already completed" });
+    if (transitions[currentStatus] !== status) {
+      return res.status(400).json({ 
+        message: `Invalid status transition from ${currentStatus} to ${status}. Expected ${transitions[currentStatus]}.` 
+      });
     }
 
     order.status = status;

@@ -6,6 +6,7 @@ const { createUser, getUsers, deleteUser, getProfile, updateProfile, deleteProfi
 
 router.post("/", verifyToken, isAdmin, createUser);
 router.get("/", verifyToken, isAdmin, getUsers);
+router.get("/tables", getUsers); // Public route for login page
 router.delete("/:id", verifyToken, isAdmin, deleteUser);
 router.patch("/:id/reset", verifyToken, isAdmin, resetTableStatus);
 

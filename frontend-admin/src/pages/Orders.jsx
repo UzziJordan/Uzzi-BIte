@@ -32,8 +32,7 @@ const Orders = () => {
     const socket = io(API);
 
     socket.on("newOrder", (newOrder) => {
-      // Refresh to get populated data
-      fetchOrders();
+      setOrders((prev) => [newOrder, ...prev]);
     });
 
     socket.on("orderUpdated", (updatedOrder) => {
@@ -59,9 +58,15 @@ const Orders = () => {
 
   const handleAction = async (id, currentStatus) => {
     try {
-      let newStatus = "pending";
-      if (currentStatus === "pending") newStatus = "preparing";
-      else if (currentStatus === "preparing") newStatus = "served";
+      const transitions = {
+        "pending": "accepted",
+        "accepted": "preparing",
+        "preparing": "ready",
+        "ready": "served"
+      };
+
+      const newStatus = transitions[currentStatus];
+      if (!newStatus) return;
 
       await axios.put(
         `${API}/api/orders/${id}`,
@@ -116,12 +121,12 @@ const Orders = () => {
     <div className="p-4 md:p-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div className="flex flex-wrap gap-2 md:gap-4">
-          {["all", "pending", "preparing", "served"].map((f) => (
+          {["all", "pending", "accepted", "preparing", "ready", "served"].map((f) => (
             <button 
               key={f} 
               onClick={() => setFilter(f)}
-              className={`px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-sm md:text-base capitalize transition-colors ${
-                filter === f ? "bg-red-500 text-white" : "bg-white border border-gray-200 hover:bg-gray-50"
+              className={`px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-xs md:text-sm capitalize font-bold transition-colors ${
+                filter === f ? "bg-red-500 text-white shadow-md shadow-red-200" : "bg-white border border-gray-200 hover:bg-gray-50 text-gray-600"
               }`}
             >
               {f}
