@@ -5,7 +5,10 @@ import { useAuth } from "../context/AuthContext";
 import { io } from "socket.io-client";
 import LoadingScreen from "../components/LoadingScreen";
 
+import { toast } from "react-hot-toast";
+
 const API = import.meta.env.VITE_API_URL.replace(/\/$/, "");
+const notificationSound = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3");
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -27,12 +30,36 @@ const Orders = () => {
   };
 
   useEffect(() => {
+    // 🔔 Request Browser Notification Permission
+    if ("Notification" in window) {
+      if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+        Notification.requestPermission();
+      }
+    }
+
     fetchOrders();
 
     const socket = io(API);
 
     socket.on("newOrder", (newOrder) => {
       setOrders((prev) => [newOrder, ...prev]);
+      
+      // 🔔 Sound Alert
+      notificationSound.play().catch(e => console.log("Audio play blocked by browser"));
+      
+      // 🍞 Toast Alert
+      toast.success(`New Order from Table ${newOrder.table?.tableNumber || "N/A"}!`, {
+        duration: 5000,
+        icon: '🔔',
+      });
+
+      // 🖥️ Browser Push Notification
+      if ("Notification" in window && Notification.permission === "granted") {
+        new Notification("New Order Received! 🚀", {
+          body: `Table ${newOrder.table?.tableNumber} has placed a new order.`,
+          icon: "/vite.svg" 
+        });
+      }
     });
 
     socket.on("orderUpdated", (updatedOrder) => {
@@ -41,10 +68,12 @@ const Orders = () => {
           order._id === updatedOrder._id ? { ...order, ...updatedOrder } : order
         )
       );
+      toast.success(`Order #${updatedOrder._id.slice(-4)} updated to ${updatedOrder.status}`);
     });
 
     socket.on("orderDeleted", (deletedId) => {
       setOrders((prev) => prev.filter((order) => order._id !== deletedId));
+      toast.error("Order cancelled/deleted");
     });
 
     socket.on("servedOrdersCleared", () => {
@@ -84,7 +113,6 @@ const Orders = () => {
         await axios.delete(`${API}/api/orders/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        // Socket will handle the removal from state
       } catch (err) {
         console.error("Error cancelling order:", err);
         alert("Failed to cancel order");
@@ -104,7 +132,6 @@ const Orders = () => {
         await axios.delete(`${API}/api/orders/clear-served`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        // Socket will handle the removal from state
       } catch (err) {
         console.error("Error clearing served orders:", err);
         alert("Failed to clear served orders");

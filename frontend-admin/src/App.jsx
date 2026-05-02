@@ -8,6 +8,7 @@ import Settings from "./pages/Settings.jsx";
 import Stats from "./pages/Stats.jsx";
 import DashBoardLayout from "./pages/DashBoardLayout.jsx";
 import { AuthProvider, useAuth } from "./context/AuthContext.jsx";
+import { Toaster } from "react-hot-toast";
 
 const ProtectedRoute = ({ children }) => {
   const { token } = useAuth();
@@ -17,6 +18,17 @@ const ProtectedRoute = ({ children }) => {
 function App() {
   return (
     <AuthProvider>
+      <Toaster 
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#333',
+            color: '#fff',
+            borderRadius: '12px'
+          }
+        }}
+      />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />

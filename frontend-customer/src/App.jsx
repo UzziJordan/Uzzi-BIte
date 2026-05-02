@@ -8,6 +8,7 @@ import MyOrders from "./pages/MyOrders";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import DashBoardLayout from "./pages/DashBoardLayout";
 import axios from "axios";
+import { Toaster } from "react-hot-toast";
 
 import { io } from "socket.io-client";
 
@@ -71,6 +72,18 @@ const SessionManager = () => {
 function App() {
   return (
     <AuthProvider>
+      <Toaster 
+        position="top-center"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#333',
+            color: '#fff',
+            borderRadius: '12px',
+            fontSize: '14px'
+          }
+        }}
+      />
       <SessionManager />
 
       <Router>
