@@ -39,28 +39,19 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
-    // 1. Allow requests with no origin (like mobile apps or curl)
-    if (!origin) return callback(null, true);
-
-    // 2. Check if the origin is in our explicit list
-    const isExplicitlyAllowed = allowedOrigins.includes(origin);
-
-    // 3. Check if it's a Vercel subdomain (covers all deployments)
-    const isVercelAllowed = origin.endsWith(".vercel.app");
-
-    // 4. Allow local development
-    const isLocal = origin.startsWith("http://localhost");
-
-    if (isExplicitlyAllowed || isVercelAllowed || isLocal || process.env.NODE_ENV === "development") {
+    // Allow local development and any vercel deployment
+    if (!origin || 
+        origin.startsWith("http://localhost") || 
+        origin.endsWith(".vercel.app") || 
+        origin.includes("uzzibites")) {
       callback(null, true);
     } else {
-      console.error(`CORS Blocked for origin: ${origin}`);
-      callback(new Error("Not allowed by CORS"));
+      callback(null, false);
     }
   },
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   credentials: true,
-  optionsSuccessStatus: 200 // Some legacy browsers choke on 204
+  optionsSuccessStatus: 200
 }));
 
 app.use(express.json());

@@ -30,25 +30,13 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: function (origin, callback) {
-      if (!origin) return callback(null, true);
-
-      const allowedOrigins = [
-        "http://localhost:5173",
-        "http://localhost:5174",
-        "https://uzzibites.vercel.app",
-        "https://uzzi-bites.vercel.app",
-        "https://uzzi-bites-admin.vercel.app",
-        "https://uzzibites-admin.vercel.app"
-      ];
-
-      const isAllowed = allowedOrigins.includes(origin) || 
-                        origin.endsWith(".vercel.app") || 
-                        origin.startsWith("http://localhost");
-
-      if (isAllowed) {
+      if (!origin || 
+          origin.startsWith("http://localhost") || 
+          origin.endsWith(".vercel.app") || 
+          origin.includes("uzzibites")) {
         callback(null, true);
       } else {
-        callback(new Error("Not allowed by CORS"));
+        callback(null, false);
       }
     },
     methods: ["GET", "POST"],
