@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { motion } from "framer-motion";
 
 import logo from "../assets/logo 2.svg";
 import { useNavigate } from "react-router-dom";

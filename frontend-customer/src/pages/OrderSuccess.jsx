@@ -3,6 +3,7 @@ import { io } from "socket.io-client";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import { motion } from "framer-motion";
 
 const API = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 
