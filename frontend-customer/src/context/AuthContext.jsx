@@ -40,9 +40,11 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            await axios.post(`${API}/api/auth/logout`, {}, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            if (token) {
+                await axios.post(`${API}/api/auth/logout`, {}, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+            }
         } catch (err) {
             console.error("Logout failed on server", err);
         }

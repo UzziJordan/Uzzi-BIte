@@ -80,7 +80,7 @@ const OrderSuccess = () => {
           Order #{orderId?.slice(-5).toUpperCase()}
         </h2>
 
-        <p className="text-center text-gray-500 mt-1 mb-6">
+        <p className="text-center text-gray-500 mt-1 mb-6 text-sm">
           {status === "pending" && "Waiting for staff to acknowledge your order..."}
           {status === "accepted" && "Your order has been received! Staff will start soon."}
           {status === "preparing" && "Your meal is being prepared! 🍽️"}

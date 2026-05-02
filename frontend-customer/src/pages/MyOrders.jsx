@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { motion } from "framer-motion";
 
 const API = import.meta.env.VITE_API_URL.replace(/\/$/, "");
 
@@ -60,6 +61,7 @@ const MyOrders = () => {
             + Place More
           </button>
         </div>
+
         {loading ? (
           <div className="flex flex-col items-center justify-center h-64">
             <motion.div 
@@ -101,16 +103,17 @@ const MyOrders = () => {
                     </span>
                   </div>
 
-                <div className="border-t border-dashed border-gray-100 pt-3 flex justify-between items-center">
-                  <div className="text-sm text-gray-500">
-                    {order.items.length} {order.items.length === 1 ? "Item" : "Items"}
-                  </div>
-                  <div className="font-bold text-red-500">
-                    ₦{order.totalPrice.toLocaleString()}
+                  <div className="border-t border-dashed border-gray-100 pt-3 flex justify-between items-center">
+                    <div className="text-sm text-gray-500">
+                      {order.items.length} {order.items.length === 1 ? "Item" : "Items"}
+                    </div>
+                    <div className="font-bold text-red-500">
+                      ₦{order.totalPrice.toLocaleString()}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
 
