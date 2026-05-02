@@ -29,7 +29,16 @@ const server = http.createServer(app);
 // attach socket.io
 const io = new Server(server, {
   cors: {
-    origin: "*"
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "https://uzzibites.vercel.app",
+      "https://uzzi-bites.vercel.app/",
+      "https://uzzi-bites-admin.vercel.app",
+      "https://uzzibites-admin.vercel.app"
+    ],
+    methods: ["GET", "POST"],
+    credentials: true
   }
 });
 

@@ -29,10 +29,12 @@ const authLimiter = rateLimit({
 
 // middleware
 const allowedOrigins = [
-  "http://localhost:5173", // Admin/Customer local dev
-  "http://localhost:5174",
-  "https://uzzi-bites.vercel.app", // Example production URL
-  "https://uzzi-bites-admin.vercel.app"
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "https://uzzibites.vercel.app",
+      "https://uzzi-bites.vercel.app/",
+      "https://uzzi-bites-admin.vercel.app",
+      "https://uzzibites-admin.vercel.app"
 ];
 
 app.use(cors({
