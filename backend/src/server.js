@@ -29,14 +29,28 @@ const server = http.createServer(app);
 // attach socket.io
 const io = new Server(server, {
   cors: {
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "https://uzzibites.vercel.app",
-      "https://uzzi-bites.vercel.app/",
-      "https://uzzi-bites-admin.vercel.app",
-      "https://uzzibites-admin.vercel.app"
-    ],
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+
+      const allowedOrigins = [
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "https://uzzibites.vercel.app",
+        "https://uzzi-bites.vercel.app",
+        "https://uzzi-bites-admin.vercel.app",
+        "https://uzzibites-admin.vercel.app"
+      ];
+
+      const isAllowed = allowedOrigins.includes(origin) || 
+                        origin.endsWith(".vercel.app") || 
+                        origin.startsWith("http://localhost");
+
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST"],
     credentials: true
   }
