@@ -29,26 +29,38 @@ const authLimiter = rateLimit({
 
 // middleware
 const allowedOrigins = [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "https://uzzibites.vercel.app",
-      "https://uzzi-bites.vercel.app/",
-      "https://uzzi-bites-admin.vercel.app",
-      "https://uzzibites-admin.vercel.app"
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "https://uzzibites.vercel.app",
+  "https://uzzi-bites.vercel.app",
+  "https://uzzi-bites-admin.vercel.app",
+  "https://uzzibites-admin.vercel.app"
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
+    // 1. Allow requests with no origin (like mobile apps or curl)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
+
+    // 2. Check if the origin is in our explicit list
+    const isExplicitlyAllowed = allowedOrigins.includes(origin);
+
+    // 3. Check if it's a Vercel subdomain (covers all deployments)
+    const isVercelAllowed = origin.endsWith(".vercel.app");
+
+    // 4. Allow local development
+    const isLocal = origin.startsWith("http://localhost");
+
+    if (isExplicitlyAllowed || isVercelAllowed || isLocal || process.env.NODE_ENV === "development") {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      console.error(`CORS Blocked for origin: ${origin}`);
+      callback(new Error("Not allowed by CORS"));
     }
   },
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-  credentials: true
+  credentials: true,
+  optionsSuccessStatus: 200 // Some legacy browsers choke on 204
 }));
 
 app.use(express.json());
