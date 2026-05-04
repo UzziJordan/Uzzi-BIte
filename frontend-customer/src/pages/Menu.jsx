@@ -23,8 +23,8 @@ const Menu = () => {
   const navigate = useNavigate();
   const { logout, tableNumber } = useAuth();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     navigate("/");
   };
 

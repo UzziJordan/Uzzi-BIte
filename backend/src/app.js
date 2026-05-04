@@ -66,7 +66,7 @@ app.use((err, req, res, next) => {
 });
 
 //Middleware for routes
-app.use("/api/auth", authLimiter, authRoutes);
+app.use("/api/auth", authRoutes);
 app.use("/api/meals", mealRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/users", userRoutes);

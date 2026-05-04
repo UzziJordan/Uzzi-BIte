@@ -32,10 +32,10 @@ const SessionManager = () => {
     // 1. Listen for Admin Reset via Sockets
     const socket = io(API);
     
-    socket.on("tableReset", (resetId) => {
+    socket.on("tableReset", async (resetId) => {
       if (resetId === userId) {
         console.log("⚠️ Table session ended by admin");
-        logout();
+        await logout();
         window.location.href = "/login";
       }
     });
@@ -47,11 +47,11 @@ const SessionManager = () => {
     window.addEventListener("scroll", updateActivity);
 
     // 2. Inactivity Check (Simplified)
-    const interval = setInterval(() => {
+    const interval = setInterval(async () => {
       const inactive = Date.now() - lastActivity;
-      // 5 minutes of inactivity
-      if (inactive > 300000) {
-        logout();
+      // 10 minutes of inactivity (increased from 5)
+      if (inactive > 600000) {
+        await logout();
         localStorage.removeItem("placedOrderIds");
         window.location.href = "/";
       }
