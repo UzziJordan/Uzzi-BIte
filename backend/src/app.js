@@ -37,22 +37,22 @@ const allowedOrigins = [
   "https://uzzibites-admin.vercel.app"
 ];
 
-app.use(cors({
-  origin: function (origin, callback) {
-    // Allow local development and any vercel deployment
-    if (!origin || 
-        origin.startsWith("http://localhost") || 
-        origin.endsWith(".vercel.app") || 
-        origin.includes("uzzibites")) {
-      callback(null, true);
-    } else {
-      callback(null, false);
-    }
-  },
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-  credentials: true,
-  optionsSuccessStatus: 200
-}));
+    app.use(cors({
+      origin: function (origin, callback) {
+        // Allow local development and any vercel deployment
+        if (!origin || 
+            origin.startsWith("http://localhost") || 
+            origin.endsWith(".vercel.app") || 
+            origin.includes("uzzibites")) {
+          callback(null, true);
+        } else {
+          callback(null, false);
+        }
+      },
+      methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+      credentials: true,
+      optionsSuccessStatus: 200
+    }));
 
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
